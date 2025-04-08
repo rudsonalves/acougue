@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '/data/repositories/auth/local_auth_repository.dart';
 import '/routing/router.dart';
 import '/ui/core/themes/brightness_controller.dart';
 import '/ui/core/themes/theme.dart';
@@ -7,6 +8,8 @@ import 'data/services/json_service.dart';
 import '/utils/provider.dart';
 
 void main() {
+  final jsonService = JsonService('data.json');
+
   runApp(
     MultiProvider(
       providers: [
@@ -14,8 +17,10 @@ void main() {
           value: BrightnessController(),
           child: child,
         ),
-        (child) =>
-            SimpleProvider(value: JsonService('data.json'), child: child),
+        (child) => SimpleProvider(
+          value: LocalAuthRepository(jsonService),
+          child: child,
+        ),
       ],
       child: const MainApp(),
     ),

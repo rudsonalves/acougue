@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BrightnessController extends ChangeNotifier {
-  BrightnessController([Brightness brightness = Brightness.light]) {
+  BrightnessController([Brightness brightness = Brightness.dark]) {
     _brightness = brightness;
   }
 

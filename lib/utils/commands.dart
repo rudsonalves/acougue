@@ -39,7 +39,6 @@ abstract class Command<Output> extends ChangeNotifier {
   /// Clear last action result
   void clearResult() {
     _result = null;
-    notifyListeners();
   }
 
   /// Internal execute implementation

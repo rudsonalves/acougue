@@ -34,6 +34,8 @@ class JsonService {
 
   User? get loggedUser => _loggedUser?.copyWith(password: '***');
 
+  Map<String, dynamic> get usersMap => _data[Collections.users.name];
+
   bool isOpen = false;
 
   /// Opens the database.
@@ -205,6 +207,22 @@ class JsonService {
     }
   }
 
+  /// Removes a user from the database by its id.
+  ///
+  /// The user must be logged in to call this function.
+  ///
+  /// Only admin and manager users can remove users.
+  ///
+  /// Admin users can remove any user.
+  ///
+  /// Manager users can only remove employee users.
+  ///
+  /// If the user is found, it is removed from the database
+  /// and `true` is returned.
+  ///
+  /// If the user is not found or the logged in user is not authorized,
+  /// `false` is returned.
+  ///
   Future<bool> removeUser(String id) async {
     if (!isOpen) await open();
 
@@ -255,6 +273,17 @@ class JsonService {
     }
   }
 
+  /// Updates the user information in the database.
+  ///
+  /// The user can only update their own information and must provide a valid password.
+  ///
+  /// Throws an exception if:
+  /// - The user is not logged in or attempts to update another user's information.
+  /// - The password is not provided or is invalid.
+  ///
+  /// The database must be opened before calling this function.
+  ///
+  /// Returns `true` if the update is successful, otherwise logs the error and returns `false`.
   Future<bool> updateUser(User user) async {
     try {
       if (_loggedUser == null || user.name != _loggedUser!.name) {

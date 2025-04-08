@@ -4,6 +4,99 @@ A new Flutter project.
 
 # ChangeLog
 
+## 2025/04/08 - version: 0.01.00+03
+
+This commit introduces the complete local authentication flow using a JSON-based service and implements a splash screen for auto-login logic.
+
+### Modified Files
+
+- **`pubspec.yaml`**
+  - Added assets path for `assets/images/`.
+
+- **`lib/data/repositories/auth/auth_repository.dart`**
+  - Introduced `initialize()` method for auto-login and updated `signIn()` to use `Credentials`.
+
+- **`lib/data/repositories/auth/local_auth_repository.dart`**
+  - Implemented `initialize()` logic for splash screen auto-login.
+  - Modified `signIn()` to accept a `Credentials` object.
+  - Updated password change logic to only allow logged-in users to update their own passwords.
+
+- **`lib/data/services/json_service.dart`**
+  - Added `usersMap` getter for listing users from the raw JSON.
+  - Documented and updated `removeUser()` and `updateUser()` methods with detailed validation and logging.
+
+- **`lib/main.dart`**
+  - Registered `LocalAuthRepository` as a provider using the same `JsonService` instance.
+
+- **`lib/routing/router.dart`**
+  - Changed `initialRoute` to `splash`.
+  - Injected `SignInViewModel`, `SignUpViewModel`, and `SplashViewModel` into respective pages.
+
+- **`lib/ui/core/themes/brightness_controller.dart`**
+  - Changed default theme brightness from light to dark.
+
+- **`lib/utils/commands.dart`**
+  - Removed `notifyListeners()` call in `clearResult()` to prevent unnecessary rebuilds.
+
+### New Files
+
+- **`lib/domain/models/credentials.dart`**
+  - Model to encapsulate name and password for sign-in/sign-up.
+
+- **`lib/ui/features/sign_in/sign_in.dart`**
+  - Redesigned login screen with validation, reactivity, and navigation.
+  - Uses `Command1` pattern for clean state management.
+
+- **`lib/ui/features/sign_in/sign_in_view_model.dart`**
+  - Implements sign-in logic using `AuthRepository`.
+
+- **`lib/ui/features/sign_up/sign_up_page.dart`**
+  - Redesigned sign-up screen with validations and success/error feedback.
+
+- **`lib/ui/features/sign_up/sign_up_view_model.dart`**
+  - Implements user registration flow logic (currently mocked as success).
+
+- **`lib/ui/features/splash/splash_page.dart`**
+  - Displays a logo animation and checks auto-login using the repository.
+
+- **`lib/ui/features/splash/splash_view_model.dart`**
+  - Executes the login check during splash screen initialization.
+
+- **`lib/ui/core/ui/logo_image.dart`**
+  - Displays the circular logo from `assets/images/logo.png`.
+
+- **`lib/ui/core/ui/messages/app_snack_bar.dart`**
+  - Utility for displaying custom `SnackBar` messages with optional icons and actions.
+
+- **`lib/ui/core/ui/buttons/big_button.dart`**
+  - Styled button with optional icon and loading state.
+
+- **`lib/ui/core/ui/buttons/text_row_button.dart`**
+  - Displays inline text + button for navigation or secondary actions.
+
+- **`lib/ui/core/ui/text_fields/basic_text_field.dart`**
+  - Custom `TextFormField` with reusability and styling options.
+
+- **`lib/ui/core/ui/text_fields/secret_text_field.dart`**
+  - Extends `BasicTextField` to hide/show password field.
+
+- **`lib/ui/core/themes/dimens.dart`**
+  - Defines spacing and layout constants for responsive design.
+
+- **`lib/ui/core/themes/fonts.dart`**
+  - Defines font sizes and family configurations for mobile and desktop.
+
+### Assets and Test Data
+
+- **`assets/images/logo.png`**
+  - Added logo used in splash and authentication screens.
+
+- **`data.json`**
+  - Includes default admin user for initial tests.
+
+With these changes, the app now supports a fully functional local authentication flow including auto-login, sign-up, and password update, while offering a polished UI with validation and feedback.
+
+
 ## 2025/04/08 - version: 0.01.00+02
 
 This commit introduces significant enhancements to the user authentication and local database management logic. It includes the implementation of a new local authentication repository, refactors user-related operations, improves serialization formats, adds validations, and introduces comprehensive test coverage.
