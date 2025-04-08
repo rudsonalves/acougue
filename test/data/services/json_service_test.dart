@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:acougue/data/repositories/common/collections.dart';
-import 'package:acougue/data/services/json_database_service.dart';
+import 'package:acougue/data/services/json_service.dart';
 import 'package:acougue/domain/enums/enums.dart';
 import 'package:acougue/domain/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final testfile =
       '/home/rudson/Documents/Projects/Flutter/Apps/acougue/test/database.json';
-  final dbServer = JsonDatabaseService(testfile);
+  final dbServer = JsonService(testfile);
 
   setUp(() {});
 

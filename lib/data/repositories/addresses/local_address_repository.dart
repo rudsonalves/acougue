@@ -3,11 +3,11 @@ import 'dart:developer';
 import '/data/repositories/addresses/address_repository.dart';
 import '../common/collections.dart';
 import '/domain/models/address.dart';
-import '/data/services/json_database_service.dart';
+import '../../services/json_service.dart';
 import '/utils/result.dart';
 
 class LocalAddressRepository implements AddressRepository {
-  final JsonDatabaseService _database;
+  final JsonService _database;
 
   LocalAddressRepository(this._database);
 

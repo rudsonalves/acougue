@@ -8,20 +8,20 @@ import '/data/repositories/common/collections.dart';
 import '/domain/enums/enums.dart';
 import '/domain/models/user.dart';
 
-/// JsonDatabase by Rudson Ribeiro Alves.
+/// JsonService by Rudson Ribeiro Alves.
 /// 2025/04/07
 ///
-/// JsonDatabase is a class that simulates a nonSQL database that stores
+/// JsonService is a class that simulates a nonSQL database that stores
 /// data in a JSON file.
 /// This database allows you to create, read, update and delete data
 /// collections.
 ///
 /// Its guarantee of operation is an act of pure faith.
 ///
-class JsonDatabaseService {
+class JsonService {
   late final File _file;
 
-  JsonDatabaseService(String filename) {
+  JsonService(String filename) {
     _file = File(filename);
     isOpen = false;
   }

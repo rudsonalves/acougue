@@ -3,11 +3,11 @@ import 'dart:developer';
 import '/data/repositories/butcher_shop/butcher_shop_repository.dart';
 import '../common/collections.dart';
 import '/domain/models/butcher_shop.dart';
-import '../../services/json_database_service.dart';
+import '../../services/json_service.dart';
 import '/utils/result.dart';
 
 class LocalButcherShopRepository implements ButcherShopRepository {
-  final JsonDatabaseService _database;
+  final JsonService _database;
 
   LocalButcherShopRepository(this._database);
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '/routing/router.dart';
 import '/ui/core/themes/brightness_controller.dart';
 import '/ui/core/themes/theme.dart';
-import '/data/services/json_database_service.dart';
+import 'data/services/json_service.dart';
 import '/utils/provider.dart';
 
 void main() {
@@ -14,10 +14,8 @@ void main() {
           value: BrightnessController(),
           child: child,
         ),
-        (child) => SimpleProvider(
-          value: JsonDatabaseService('data.json'),
-          child: child,
-        ),
+        (child) =>
+            SimpleProvider(value: JsonService('data.json'), child: child),
       ],
       child: const MainApp(),
     ),

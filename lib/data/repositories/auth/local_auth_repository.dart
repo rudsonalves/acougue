@@ -1,12 +1,12 @@
 import 'dart:developer';
 
 import '/data/repositories/auth/auth_repository.dart';
-import '/data/services/json_database_service.dart';
+import '../../services/json_service.dart';
 import '/domain/models/user.dart';
 import '/utils/result.dart';
 
 class LocalAuthRepository implements AuthRepository {
-  final JsonDatabaseService _database;
+  final JsonService _database;
 
   LocalAuthRepository(this._database);
 
