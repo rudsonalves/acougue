@@ -1,4 +1,10 @@
 abstract final class Validate {
+  /// Checks if a given email is valid.
+  ///
+  /// A email is valid if it is not null, not empty, and matches
+  /// the regular expression `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$`.
+  ///
+  /// Returns null if the email is valid, otherwise returns an error message.
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'E-mail é obrigatório';
@@ -14,6 +20,12 @@ abstract final class Validate {
     return null;
   }
 
+  /// Checks if a given password is valid.
+  ///
+  /// A password is valid if it is not null, not empty, has at least 6 characters,
+  /// and contains at least one letter and one number.
+  ///
+  /// Returns null if the password is valid, otherwise returns an error message.
   static String? password(String? value) {
     if (value == null || value.isEmpty) {
       return 'Senha é obrigatória';
@@ -32,6 +44,11 @@ abstract final class Validate {
     return null;
   }
 
+  /// Checks if the given value is a valid confirmation of a given password.
+  ///
+  /// A value is a valid confirmation if it is not null, not empty, and equals the given password.
+  ///
+  /// Returns null if the value is valid, otherwise returns an error message.
   static String? confirmPassword(String? value, String? password) {
     if (value == null || value.isEmpty) {
       return 'Confirmação de senha é obrigatória';
