@@ -44,9 +44,9 @@ class ButcherShop {
     result.addAll({'name': name});
     result.addAll({'description': description});
     result.addAll({'addressId': addressId});
-    result.addAll({'createdAt': createdAt});
+    result.addAll({'createdAt': createdAt.millisecondsSinceEpoch});
     if (updatedAt != null) {
-      result.addAll({'updatedAt': updatedAt});
+      result.addAll({'updatedAt': updatedAt!.millisecondsSinceEpoch});
     }
 
     return result;
@@ -58,8 +58,11 @@ class ButcherShop {
       name: map['name'] as String,
       description: map['description'] as String,
       addressId: map['addressId'] as String,
-      createdAt: map['createdAt'] as DateTime,
-      updatedAt: map['updatedAt'] as DateTime?,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      updatedAt:
+          map['updatedAt'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
+              : null,
     );
   }
 

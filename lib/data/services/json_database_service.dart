@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:developer';
 
+import '/utils/validate.dart';
 import '/data/repositories/common/collections.dart';
 import '/domain/enums/enums.dart';
 import '/domain/models/user.dart';
@@ -19,19 +20,21 @@ import '/domain/models/user.dart';
 ///
 class JsonDatabaseService {
   late final File _file;
-  late final Map<String, dynamic> _data;
 
   JsonDatabaseService(String filename) {
     _file = File(filename);
     isOpen = false;
   }
 
+  final math.Random _random = math.Random();
+
+  Map<String, dynamic> _data = {};
+
   User? _loggedUser;
 
   User? get loggedUser => _loggedUser?.copyWith(password: '***');
 
   bool isOpen = false;
-  final math.Random _random = math.Random();
 
   /// Opens the database.
   ///
@@ -43,6 +46,7 @@ class JsonDatabaseService {
     if (isOpen) return;
 
     try {
+      isOpen = true;
       if (await _file.exists()) {
         final content = await _file.readAsString();
         _data = json.decode(content) as Map<String, dynamic>;
@@ -61,31 +65,32 @@ class JsonDatabaseService {
           position: Positions.admin,
           createdAt: DateTime.now(),
         );
-        _data[Collections.users.name][admin.id] = admin.toMap();
+        _data[Collections.users.name][admin.id!] = admin.toMap();
+        await _save();
       }
-      isOpen = true;
-    } catch (err) {
+    } on Exception catch (err) {
+      isOpen = false;
       throw Exception(err);
     }
   }
 
-  /// Signs in a user.
+  /// Signs in the user.
   ///
-  /// The user is identified by its 'username' and 'password' keys.
-  ///
-  /// Throws an exception if the user is not found or if the password is
-  /// invalid.
+  /// The user is identified by its 'username' and 'password'.
   ///
   /// The database must be opened before calling this function.
   ///
-  /// The user is stored in [_loggedUser] if the signin is successful.
+  /// If the user is found, the user is stored in [_loggedUser] and
+  /// returned.
   ///
-  /// If an error occurs, [_loggedUser] is set to null.
-  Future<void> signIn(String userName, String password) async {
+  /// If the user is not found or the password is invalid, null is returned.
+  ///
+  /// If an error occurs, null is returned.
+  Future<User?> signIn(String userName, String password) async {
     if (!isOpen) await open();
 
     try {
-      final findUser = _findUser(userName);
+      final findUser = _findUserByName(userName);
 
       if (findUser == null) {
         throw Exception('User not found');
@@ -97,10 +102,11 @@ class JsonDatabaseService {
       }
 
       _loggedUser = findUser;
+      return _loggedUser!;
     } catch (err) {
       _loggedUser = null;
       log('JsonDatabaseService.signIn: $err');
-      throw Exception(err);
+      return null;
     }
   }
 
@@ -115,18 +121,18 @@ class JsonDatabaseService {
   /// The user is stored in [_data] if the user is found.
   ///
   /// If an error occurs, null is returned.
-  User? _findUser(String userName) {
+  User? _findUserByName(String userName) {
     try {
-      final users =
-          _data[Collections.users.name] as Map<String, Map<String, dynamic>>?;
+      final users = _data[Collections.users.name] as Map<String, dynamic>?;
       if (users == null) {
         throw Exception('Users collection not found');
       }
 
       for (final userMap in users.values) {
-        if ((userMap['username'] as String).toLowerCase() ==
+        if ((userMap['name'] as String).toLowerCase() ==
             userName.toLowerCase()) {
-          return User.fromMap(userMap);
+          final findedUser = User.fromMap(userMap);
+          return findedUser;
         }
       }
       return null;
@@ -151,44 +157,124 @@ class JsonDatabaseService {
   /// The user is stored in [_data] if the signup is successful.
   ///
   /// If an error occurs, false is returned.
-  Future<bool> signUp(User user) async {
+  Future<String?> addUser(User user) async {
     if (!isOpen) await open();
 
-    // Check if the user is logged in
-    if (_loggedUser == null) {
-      throw Exception('User not logged in');
-    }
-
     try {
+      // Check if the user is logged in
+      if (_loggedUser == null) {
+        throw Exception('User not logged in');
+      }
+
       // Only admin|manager users can create new users
-      if (_loggedUser!.position != Positions.admin ||
+      if (_loggedUser!.position != Positions.admin &&
           _loggedUser!.position != Positions.manager) {
         throw Exception('only admin or manager users can create new users.');
       }
 
+      // Only admin users can create admin users.
       if (_loggedUser!.position != Positions.admin &&
           user.position == Positions.admin) {
         throw Exception('only admin users can create admin users.');
+      }
+
+      // Manager users can create only employee users
+      if (_loggedUser!.position == Positions.manager &&
+          user.position != Positions.employee) {
+        throw Exception('manager users can create only employee users');
       }
 
       if (user.id != null) {
         throw Exception('User id is not null');
       }
 
-      if (_findUser(user.name) != null) {
+      if (_findUserByName(user.name) != null) {
         throw Exception('User ${user.name} already exists');
       }
 
       final uid = _generateUid();
-      final map = user.toMap();
-      map.remove('id');
+      final map = user.copyWith(id: uid).toMap();
 
-      _data[Collections.users.name][uid] = user.toMap();
+      _data[Collections.users.name][uid] = map;
+      await _save();
+
+      return uid;
+    } catch (err) {
+      log('JsonDatabaseService.signUp: $err');
+      return null;
+    }
+  }
+
+  Future<bool> removeUser(String id) async {
+    if (!isOpen) await open();
+
+    try {
+      // Check if the user is logged in
+      if (_loggedUser == null) {
+        throw Exception('User not logged in');
+      }
+
+      // Check for user in local database
+      final userMap = _data[Collections.users.name][id];
+      if (userMap == null) {
+        throw Exception('Not found user of id $id.');
+      }
+
+      final position = Positions.values.byName(userMap['position'] as String);
+      final loggedPosition = _loggedUser!.position;
+
+      // Only admin|manager users can remove users
+      if (loggedPosition != Positions.admin &&
+          loggedPosition != Positions.manager) {
+        throw Exception('only admin or manager users can create new users.');
+      }
+
+      // Only admin users can create admin users.
+      if (loggedPosition != Positions.admin && position == Positions.admin) {
+        throw Exception('only admin users can remove admin users.');
+      }
+
+      // Manager users can delete only employee users
+      if (loggedPosition == Positions.manager &&
+          position != Positions.employee) {
+        throw Exception('manager users can create only employee users');
+      }
+
+      // Manager user can not remove admin user
+      if (loggedPosition == Positions.manager && position == Positions.admin) {
+        throw Exception('manager user can not remove admin user');
+      }
+
+      (_data[Collections.users.name] as Map<String, dynamic>).remove(id);
       await _save();
 
       return true;
     } catch (err) {
-      log('JsonDatabaseService.signUp: $err');
+      log('JsonDatabaseService.removeUser: $err');
+      return false;
+    }
+  }
+
+  Future<bool> updateUser(User user) async {
+    try {
+      if (_loggedUser == null || user.name != _loggedUser!.name) {
+        throw Exception('only owner can change your informations');
+      }
+
+      if (user.password == null) {
+        throw Exception('a password is required to upgrade your information.');
+      }
+
+      if (Validate.password(user.password) != null) {
+        throw Exception('this is a invalid password');
+      }
+
+      _data[Collections.users.name][user.id!] = user.toMap();
+      _loggedUser = user;
+      await _save();
+      return true;
+    } on Exception catch (err) {
+      log('JsonDatabaseService.updateUser: $err');
       return false;
     }
   }
@@ -212,7 +298,7 @@ class JsonDatabaseService {
   Future<void> close() async {
     if (!isOpen) return;
     try {
-      await _save();
+      // await _save();
       _data.clear();
       isOpen = false;
     } catch (err) {
@@ -296,8 +382,8 @@ class JsonDatabaseService {
       }
 
       // Generate a unique ID
-      map.remove('id');
       final uid = _generateUid();
+      map['id'] = uid;
       _data[collection.name] = {uid: map};
 
       await _save();
@@ -318,7 +404,7 @@ class JsonDatabaseService {
   ///
   /// The entry is removed from the collection and the database is saved
   /// immediately after removal.
-  Future<void> removeFromCollection(Collections collection, String id) async {
+  Future<bool> removeFromCollection(Collections collection, String id) async {
     try {
       if (!isOpen) await open();
 
@@ -326,14 +412,16 @@ class JsonDatabaseService {
         throw Exception('Collection $collection does not exist');
       }
 
-      if (!_data.containsKey(id)) {
+      if (!_data[collection.name].containsKey(id)) {
         throw Exception('Id $id does not exist');
       }
 
       _data[collection.name].remove(id);
       await _save();
+      return true;
     } catch (err) {
-      throw Exception(err);
+      log('JsonDatabaseService.removeFromCollection: $err');
+      return false;
     }
   }
 
@@ -348,7 +436,7 @@ class JsonDatabaseService {
   ///
   /// The entry is updated in the collection and the database is saved
   /// immediately after update.
-  Future<void> updateInCollection(
+  Future<bool> updateInCollection(
     Collections collection,
     Map<String, dynamic> map,
   ) async {
@@ -360,16 +448,16 @@ class JsonDatabaseService {
       }
 
       final id = map['id'];
-      if (!_data.containsKey(id)) {
+      if (!_data[collection.name].containsKey(id)) {
         throw Exception('Id $id does not exist');
       }
 
-      map.remove('id');
-
       _data[collection.name][id] = map;
       await _save();
+      return true;
     } catch (err) {
-      throw Exception(err);
+      log('JsonDatabaseService.updateInCollection: $err');
+      return false;
     }
   }
 

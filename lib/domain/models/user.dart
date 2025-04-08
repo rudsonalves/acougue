@@ -21,9 +21,9 @@ class User {
     required this.document,
     required this.contact,
     this.position = Positions.employee,
-    required this.createdAt,
+    DateTime? createdAt,
     this.updatedAt,
-  });
+  }) : createdAt = createdAt ?? DateTime.now();
 
   User copyWith({
     String? id,
@@ -61,9 +61,9 @@ class User {
     result.addAll({'document': document});
     result.addAll({'contact': contact});
     result.addAll({'position': position.name});
-    result.addAll({'createdAt': createdAt});
+    result.addAll({'createdAt': createdAt.millisecondsSinceEpoch});
     if (updatedAt != null) {
-      result.addAll({'updatedAt': updatedAt});
+      result.addAll({'updatedAt': updatedAt!.millisecondsSinceEpoch});
     }
 
     return result;
@@ -78,8 +78,11 @@ class User {
       document: map['document'] as String,
       contact: map['contact'] as String,
       position: Positions.values.byName(map['position'] as String),
-      createdAt: map['createdAt'] as DateTime,
-      updatedAt: map['updatedAt'] as DateTime?,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      updatedAt:
+          map['updatedAt'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
+              : null,
     );
   }
 
