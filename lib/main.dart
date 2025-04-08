@@ -1,9 +1,10 @@
-import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/core/themes/brightness_controller.dart';
-import 'package:acougue/ui/core/themes/theme.dart';
-import 'package:acougue/data/services/json_database.dart';
-import 'package:acougue/utils/provider.dart';
 import 'package:flutter/material.dart';
+
+import '/routing/router.dart';
+import '/ui/core/themes/brightness_controller.dart';
+import '/ui/core/themes/theme.dart';
+import '/data/services/json_database_service.dart';
+import '/utils/provider.dart';
 
 void main() {
   runApp(

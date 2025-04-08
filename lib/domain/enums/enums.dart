@@ -11,3 +11,15 @@ enum AddressType implements LabeledEnum {
 
   const AddressType(this.label);
 }
+
+enum Positions implements LabeledEnum {
+  admin('Administrador'),
+  manager('Gerente'),
+  employee('Funcionário'),
+  others('Outros');
+
+  @override
+  final String label;
+
+  const Positions(this.label);
+}
