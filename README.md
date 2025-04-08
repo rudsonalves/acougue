@@ -58,56 +58,56 @@ These changes establish a robust foundation for user account management with pro
 
 ## 2025/04/08 - version: 0.01.00+01
     
-    Added user authentication features, refactored JSON database service, and improved repository interfaces.
+Added user authentication features, refactored JSON database service, and improved repository interfaces.
     
-    ### Changes made:
+### Changes made:
     
-    1. **Makefile**:
-       - Added targets for common git operations (`diff`, `push`, `push_branch`), Flutter rebuild, and test coverage.
+1. **Makefile**:
+   - Added targets for common git operations (`diff`, `push`, `push_branch`), Flutter rebuild, and test coverage.
     
-    2. **lib/data/repositories/addresses/address_repository.dart**:
-       - Added `addresses` and `addressList` getters to provide local access to address data.
+2. **lib/data/repositories/addresses/address_repository.dart**:
+   - Added `addresses` and `addressList` getters to provide local access to address data.
     
-    3. **lib/data/repositories/addresses/local_address_repository.dart**:
-       - Replaced `AppConstants` with `Collections` enum for better consistency.
-       - Refactored to use `addressCollection` constant.
-       - Implemented the new `addresses` and `addressList` getters.
+3. **lib/data/repositories/addresses/local_address_repository.dart**:
+   - Replaced `AppConstants` with `Collections` enum for better consistency.
+   - Refactored to use `addressCollection` constant.
+   - Implemented the new `addresses` and `addressList` getters.
     
-    4. **lib/data/repositories/auth/auth_repository.dart**:
-       - Created new abstract `AuthRepository` with methods for sign-in, sign-up, sign-out, and password change.
+4. **lib/data/repositories/auth/auth_repository.dart**:
+   - Created new abstract `AuthRepository` with methods for sign-in, sign-up, sign-out, and password change.
+  
+5. **lib/data/repositories/butcher_shop/butcher_shop_repository.dart**:
+   - Added `butcher` getter for accessing local butcher shop data.
     
-    5. **lib/data/repositories/butcher_shop/butcher_shop_repository.dart**:
-       - Added `butcher` getter for accessing local butcher shop data.
+6. **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**:
+   - Replaced `AppConstants` with `Collections` enum.
+   - Added `butcherCollection` constant.
+   - Refactored CRUD operations to use the enum-based collection name.
     
-    6. **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**:
-       - Replaced `AppConstants` with `Collections` enum.
-       - Added `butcherCollection` constant.
-       - Refactored CRUD operations to use the enum-based collection name.
+7. **lib/data/repositories/common/app_constats.dart**:
+   - Deleted legacy file with hardcoded collection constants.
     
-    7. **lib/data/repositories/common/app_constats.dart**:
-       - Deleted legacy file with hardcoded collection constants.
+8. **lib/data/repositories/common/collections.dart**:
+   - Created `Collections` enum to centralize and type-safe collection names.
     
-    8. **lib/data/repositories/common/collections.dart**:
-       - Created `Collections` enum to centralize and type-safe collection names.
+9. **lib/data/services/json_database_service.dart**:
+   - Refactored all methods to use the `Collections` enum.
+   - Added `loggedUser` getter with masked password.
+   - Implemented `signIn`, `signOut`, and `signUp` user authentication methods.
+   - Added internal `_findUser` method to locate users by name.
+   - Added user auto-creation on database initialization (admin).
+   - Increased UID generation size from 12 to 32 characters.
     
-    9. **lib/data/services/json_database_service.dart**:
-       - Refactored all methods to use the `Collections` enum.
-       - Added `loggedUser` getter with masked password.
-       - Implemented `signIn`, `signOut`, and `signUp` user authentication methods.
-       - Added internal `_findUser` method to locate users by name.
-       - Added user auto-creation on database initialization (admin).
-       - Increased UID generation size from 12 to 32 characters.
+10. **lib/domain/enums/enums.dart**:
+    - Added `Positions` enum with labels to define user roles.
     
-    10. **lib/domain/enums/enums.dart**:
-        - Added `Positions` enum with labels to define user roles.
+11. **lib/domain/models/user.dart**:
+    - Created `User` model with serialization, deserialization, and utility methods.
     
-    11. **lib/domain/models/user.dart**:
-        - Created `User` model with serialization, deserialization, and utility methods.
+12. **lib/main.dart**:
+    - Refactored imports to a cleaner format.
+    - Updated JSON database import path to `json_database_service.dart`.
     
-    12. **lib/main.dart**:
-        - Refactored imports to a cleaner format.
-        - Updated JSON database import path to `json_database_service.dart`.
+### Conclusion:
     
-    ### Conclusion:
-    
-    This commit introduces a foundational user authentication system, transitioning to a more structured approach using enums for collections and user roles. It also enhances repository interfaces and brings consistency across the database service through refactoring and better design principles.
+This commit introduces a foundational user authentication system, transitioning to a more structured approach using enums for collections and user roles. It also enhances repository interfaces and brings consistency across the database service through refactoring and better design principles.
