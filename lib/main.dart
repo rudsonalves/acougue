@@ -61,7 +61,7 @@ class _MainAppState extends State<MainApp> {
           debugShowCheckedModeBanner: false,
           initialRoute: Routes.initialRoute,
           routes: Routes.routes,
-          // onGenerateInitialRoutes: Routes.onGenerateInitialRoutes,
+          onGenerateRoute: Routes.onGenerateRoutes,
         );
       },
     );

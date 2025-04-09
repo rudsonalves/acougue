@@ -13,8 +13,15 @@ import '/ui/features/address/address_view_model.dart';
 
 class AddressPage extends StatefulWidget {
   final AddressViewModel addressViewModel;
+  final void Function(Address address) callBack;
+  final String? addressId;
 
-  const AddressPage({super.key, required this.addressViewModel});
+  const AddressPage({
+    super.key,
+    this.addressId,
+    required this.addressViewModel,
+    required this.callBack,
+  });
 
   @override
   State<AddressPage> createState() => _AddressPageState();
@@ -34,11 +41,17 @@ class _AddressPageState extends State<AddressPage> {
 
   AddressType _selectedAddressType = AddressType.residential;
   BrStates? _selectedState;
+  String? _addressId;
 
   @override
   void initState() {
     _addressViewModel = widget.addressViewModel;
-    _addressViewModel.save.addListener(_onSave);
+    _addressViewModel.save.addListener(_onSaved);
+    _addressId = widget.addressId;
+
+    if (_addressId != null && _addressId!.trim().isNotEmpty) {
+      _initializeAddress();
+    }
 
     super.initState();
   }
@@ -257,13 +270,14 @@ class _AddressPageState extends State<AddressPage> {
     _addressViewModel.save.execute(address);
   }
 
-  void _onSave() {
+  void _onSaved() {
     if (_addressViewModel.save.running) return;
 
     final result = _addressViewModel.save.result!;
 
     result.fold(
       onSuccess: (_) {
+        widget.callBack(_addressViewModel.address!);
         Navigator.pop(context);
       },
       onFailure: (err) {
@@ -277,5 +291,20 @@ class _AddressPageState extends State<AddressPage> {
         );
       },
     );
+  }
+
+  Future<void> _initializeAddress() async {
+    await _addressViewModel.getAddress.execute(_addressId!);
+
+    final address = _addressViewModel.address!;
+
+    _streetController.text = address.street;
+    _numberController.text = address.number;
+    _complementController.text = address.complement!;
+    _neighborhoodController.text = address.neighborhood;
+    _zipCodeController.text = address.cep;
+    _cityController.text = address.city;
+    _selectedState = BrStates.values.byName(address.state);
+    _selectedAddressType = address.type;
   }
 }

@@ -26,6 +26,10 @@ class Address {
     required this.state,
   });
 
+  String get fullAddress =>
+      '$street, $number, $complement, '
+      '$neighborhood, $city - $state';
+
   Address copyWith({
     String? id,
     AddressType? type,
