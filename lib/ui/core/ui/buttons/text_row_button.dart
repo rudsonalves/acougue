@@ -22,7 +22,7 @@ class TextRowButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             textButton,
-            style: TextStyle(decoration: TextDecoration.underline),
+            style: const TextStyle(decoration: TextDecoration.underline),
           ),
         ),
       ],

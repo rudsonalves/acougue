@@ -28,10 +28,10 @@ class BigButton extends StatefulWidget {
 class _BigButtonState extends State<BigButton> {
   Widget _bigButtonIcon() {
     return widget.isRunning
-        ? SizedBox(
+        ? const SizedBox(
           width: 24,
           height: 24,
-          child: const CircularProgressIndicator(),
+          child: CircularProgressIndicator(),
         )
         : Icon(widget.iconData, size: 24);
   }

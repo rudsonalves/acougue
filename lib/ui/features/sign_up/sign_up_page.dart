@@ -54,7 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criar Conta'),
+        title: const Text('Criar Conta'),
         centerTitle: true,
         elevation: 1,
       ),

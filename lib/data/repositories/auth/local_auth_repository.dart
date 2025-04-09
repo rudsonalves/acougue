@@ -46,6 +46,10 @@ class LocalAuthRepository implements AuthRepository {
     try {
       _user = await _database.signIn(credentials.name, credentials.password);
 
+      if (_user == null) {
+        return Result.failure(Exception('login fail'));
+      }
+
       return Result.success(_user!);
     } on Exception catch (err) {
       _user = null;
@@ -64,7 +68,7 @@ class LocalAuthRepository implements AuthRepository {
       final newUser = _user!.copyWith(password: password);
       await _database.updateUser(newUser);
 
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);
@@ -79,7 +83,7 @@ class LocalAuthRepository implements AuthRepository {
         throw Exception('update fail');
       }
 
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       _user = null;
       log(err.toString());
@@ -92,7 +96,7 @@ class LocalAuthRepository implements AuthRepository {
     try {
       _user = null;
       await _database.signOut();
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);
@@ -103,7 +107,7 @@ class LocalAuthRepository implements AuthRepository {
   Future<Result<void>> addUser(User user) async {
     try {
       await _database.addUser(user);
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);

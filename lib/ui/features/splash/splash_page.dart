@@ -46,8 +46,8 @@ class _SplashPageState extends State<SplashPage> {
             AnimatedScale(
               scale: _scale,
               curve: Curves.easeInCirc,
-              duration: Duration(seconds: 1),
-              child: LogoImage(radius: 125),
+              duration: const Duration(seconds: 1),
+              child: const LogoImage(radius: 125),
             ),
             // Text('Açougue Sabor da Morte'),
           ],

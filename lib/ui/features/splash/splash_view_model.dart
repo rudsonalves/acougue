@@ -15,7 +15,7 @@ class SplashViewModel {
 
   Future<Result<void>> _load() async {
     final result = await authRepository.initialize();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     result.fold(
       onSuccess: (_) {

@@ -1,5 +1,5 @@
-import 'package:acougue/domain/models/address.dart';
-import 'package:acougue/utils/result.dart';
+import '/domain/models/address.dart';
+import '/utils/result.dart';
 
 abstract class AddressRepository {
   Map<String, Address> get addresses;

@@ -4,6 +4,103 @@ A new Flutter project.
 
 # ChangeLog
 
+## 2025/04/09 - version: 0.01.01+05
+
+### Add Address Management UI and Improve Validation Rules
+
+This commit introduces a complete interface for managing user addresses, including a new address form page, view model, and enumeration for Brazilian states. It also enhances code consistency by enforcing constant constructors and literals, and improves form validation logic throughout the app.
+
+### Modified Files
+- **analysis_options.yaml**
+  - Enforced `prefer_const_constructors` and `prefer_const_literals_to_create_immutables` lint rules.
+
+- **lib/data/repositories/addresses/address_repository.dart**
+  - Updated imports to use relative paths.
+
+- **lib/data/repositories/addresses/local_address_repository.dart**
+  - Marked success responses with `const` constructors for optimization.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Enforced `const` usage in success results.
+  - Added null-checking for login credentials to handle failed authentication gracefully.
+
+- **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**
+  - Marked `Result.success` with `const`.
+
+- **lib/data/services/json_service.dart**
+  - Improved validation logic to compare user IDs instead of names.
+
+- **lib/domain/enums/enums.dart**
+  - Added `BrStates` enum with full list of Brazilian states and labels.
+  - Included `ignore_for_file` comment for constant naming convention.
+
+- **lib/main.dart**
+  - Registered `LocalAddressRepository` in provider list.
+  - Used `const` constructor for `MaterialTheme`.
+
+- **lib/routing/router.dart**
+  - Registered new route `/address` and injected `AddressViewModel`.
+
+- **lib/ui/core/themes/fonts.dart**
+  - Added `const` to all `TextStyle` constructors for optimization.
+
+- **lib/ui/core/ui/buttons/big_button.dart**
+  - Used `const` constructors in `CircularProgressIndicator` and `SizedBox`.
+
+- **lib/ui/core/ui/buttons/text_row_button.dart**
+  - Used `const` in `TextStyle`.
+
+- **lib/ui/core/ui/messages/app_snack_bar.dart**
+  - Used `const Divider`.
+
+- **lib/ui/core/ui/text_fields/basic_dropdown_fielt.dart**
+  - Added support for `hintText` and `floatingLabelBehavior`.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Enhanced layout and styling.
+  - Added logic to navigate to the address form.
+  - Implemented `ListenableBuilder` to show loading state on update button.
+  - Refactored update logic to show error message via `AppSnackBar`.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Introduced artificial delay in `update` for better UX feedback.
+
+- **lib/ui/features/sign_in/sign_in.dart**
+  - Commented out account creation navigation.
+  - Replaced navigation on login success with simple `Navigator.pop`.
+  - Adjusted error handling message.
+
+- **lib/ui/features/sign_in/sign_in_view_model.dart**
+  - Wrapped error in `Result.failure` instead of rethrowing.
+
+- **lib/ui/features/sign_up/sign_up_page.dart**
+  - Converted title `Text` widget to `const`.
+
+- **lib/ui/features/splash/splash_page.dart**
+  - Used `const` in `AnimatedScale` child and duration.
+
+- **lib/ui/features/splash/splash_view_model.dart**
+  - Made delay `Duration` constant.
+
+- **lib/utils/validate.dart**
+  - Added `docNumber` and `simple` validation methods.
+  - Introduced a shared RegExp pattern for document number format.
+
+- **storage/data.json**
+  - Added an initial address object and updated the user object with new ID.
+
+### New Files
+- **lib/ui/features/address/address_page.dart**
+  - Complete address form UI for adding user address data.
+  - Includes input fields, dropdowns for address type and state, and submission logic.
+
+- **lib/ui/features/address/address_view_model.dart**
+  - ViewModel handling address save and update logic via Command pattern.
+
+### Conclusion
+All features and refactors were successfully integrated, enhancing the app's user profile management capabilities and improving code quality across the board.
+
+
 ## 2025/04/09 - version: 0.01.00+04
 
 ### Add user editing functionality and refactor related structure

@@ -10,7 +10,6 @@ import '/ui/core/ui/text_fields/secret_text_field.dart';
 import '/utils/validate.dart';
 import '../../core/ui/images/logo_image.dart';
 import '/ui/features/sign_in/sign_in_view_model.dart';
-import '/routing/router.dart';
 
 class SignInPage extends StatefulWidget {
   final SignInViewModel signInViewModel;
@@ -42,7 +41,11 @@ class _SignInPageState extends State<SignInPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Entrar'), centerTitle: true, elevation: 1),
+      appBar: AppBar(
+        title: const Text('Entrar'),
+        centerTitle: true,
+        elevation: 1,
+      ),
       backgroundColor: colorScheme.surfaceContainerLow,
       body: Center(
         child: SingleChildScrollView(
@@ -52,7 +55,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
           child: Column(
             children: [
-              LogoImage(radius: 80),
+              const LogoImage(radius: 80),
               SizedBox(height: dimens.spacingVertical * 2),
               Padding(
                 padding: EdgeInsets.all(dimens.paddingScreenAll),
@@ -107,11 +110,11 @@ class _SignInPageState extends State<SignInPage> {
                           );
                         },
                       ),
-                      TextRowButton(
-                        labelText: 'Não possui conta?',
-                        textButton: 'Criar conta!',
-                        onPressed: _createAccount,
-                      ),
+                      // TextRowButton(
+                      //   labelText: 'Não possui conta?',
+                      //   textButton: 'Criar conta!',
+                      //   onPressed: _createAccount,
+                      // ),
                     ],
                   ),
                 ),
@@ -130,13 +133,10 @@ class _SignInPageState extends State<SignInPage> {
 
     result.fold(
       onSuccess: (user) {
-        Navigator.pushReplacementNamed(context, Routes.home);
+        Navigator.pop(context);
       },
       onFailure: (err) {
-        final erroMessage =
-            err.toString().contains('statusCode: 400')
-                ? 'Email ou senha inválidos!'
-                : 'Desculpe. Ocorreu um erro inesperado. Tente novamente!';
+        final erroMessage = 'Email ou senha inválidos! Tente novamente.';
         AppSnackBar.showBottom(
           context,
           title: 'Erro!',
@@ -152,9 +152,9 @@ class _SignInPageState extends State<SignInPage> {
 
   void _recoverPassword() {}
 
-  void _createAccount() {
-    Navigator.pushReplacementNamed(context, Routes.signup);
-  }
+  // void _createAccount() {
+  //   Navigator.pushReplacementNamed(context, Routes.signup);
+  // }
 
   void _signIn() {
     FocusScope.of(context).unfocus();

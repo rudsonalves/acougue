@@ -19,6 +19,7 @@ class SignInViewModel extends ChangeNotifier {
   Future<Result<void>> _signIn(Credentials credentials) async {
     try {
       final result = await _authRepository.signIn(credentials);
+      await Future.delayed(const Duration(seconds: 2));
 
       result.fold(
         onSuccess: (value) {
@@ -30,9 +31,9 @@ class SignInViewModel extends ChangeNotifier {
       );
 
       return result;
-    } catch (err) {
+    } on Exception catch (err) {
       log('Login failed: $err', level: 5);
-      rethrow;
+      return Result.failure(err);
     }
   }
 }
