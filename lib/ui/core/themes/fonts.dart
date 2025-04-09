@@ -46,27 +46,27 @@ final class _FontsThemeStyleMobile extends AppFontsStyle {
 
   @override
   TextStyle get bodyExtraSmallTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 10.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 10.0);
 
   @override
   TextStyle get bodySmallTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 12.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 12.0);
 
   @override
   TextStyle get bodyTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 14.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 14.0);
 
   @override
   TextStyle get bodyExtraLargeTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 22.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 22.0);
 
   @override
   TextStyle get bodyLargeTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
 
   @override
   TextStyle get displayTextStyle =>
-      TextStyle(fontFamily: FontsTheme.display, fontSize: 20.0);
+      const TextStyle(fontFamily: FontsTheme.display, fontSize: 20.0);
 }
 
 /// Font Styles for desktop devices
@@ -75,25 +75,25 @@ final class _FontsThemeStyleDesktop extends AppFontsStyle {
 
   @override
   TextStyle get bodyExtraSmallTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 12.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 12.0);
 
   @override
   TextStyle get bodySmallTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 14.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 14.0);
 
   @override
   TextStyle get bodyTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 16.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 16.0);
 
   @override
   TextStyle get bodyLargeTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 18.0);
 
   @override
   TextStyle get bodyExtraLargeTextStyle =>
-      TextStyle(fontFamily: FontsTheme.body, fontSize: 24.0);
+      const TextStyle(fontFamily: FontsTheme.body, fontSize: 24.0);
 
   @override
   TextStyle get displayTextStyle =>
-      TextStyle(fontFamily: FontsTheme.display, fontSize: 24.0);
+      const TextStyle(fontFamily: FontsTheme.display, fontSize: 24.0);
 }

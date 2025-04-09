@@ -52,7 +52,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
       await _database.removeFromCollection(butcherCollection, _butcher!.id!);
 
       _butcher = null;
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);
@@ -64,7 +64,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
     try {
       await _database.updateInCollection(butcherCollection, butcher.toMap());
       _butcher = butcher;
-      return Result.success(null);
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);

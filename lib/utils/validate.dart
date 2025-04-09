@@ -1,4 +1,24 @@
+final docNumberRegex = RegExp(r'^[\d-.]+$');
+
 abstract final class Validate {
+  /// Checks if a given string is not null and not empty.
+  ///
+  /// A string is valid if it is not null and not empty.
+  ///
+  /// Returns null if the string is valid, otherwise returns an error message.
+  static String? simple(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Este campo é obrigatório.';
+    }
+
+    return null;
+  }
+
+  /// Validates that a string is not null, not empty, and has a minimum length.
+  ///
+  /// This method checks if the given [value] is not null, not empty, and has
+  /// at least 5 characters. Returns an error message if any of these conditions
+  /// are not met, otherwise returns null.
   static String? generic(String? value) {
     if (value == null || value.isEmpty) {
       return 'Este campo é obrigatório.';
@@ -67,6 +87,24 @@ abstract final class Validate {
 
     if (value != password) {
       return 'As senhas devem ser iguais';
+    }
+
+    return null;
+  }
+
+  /// Checks if the given value is a valid document number.
+  ///
+  /// A document number is valid if it is not null, not empty, and contains only numbers, dashes, and periods.
+  ///
+  /// Returns null if the document number is valid, otherwise returns an error message.
+  static String? docNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Este campo é obrigatório.';
+    }
+
+    // final docNumberRegex = RegExp(r'[0-9-.]+');
+    if (!docNumberRegex.hasMatch(value)) {
+      return 'Apenas números, traço e ponto.';
     }
 
     return null;

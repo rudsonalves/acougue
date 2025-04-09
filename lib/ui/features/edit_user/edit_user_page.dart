@@ -1,3 +1,5 @@
+import 'package:acougue/routing/router.dart';
+import 'package:acougue/ui/core/ui/messages/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import '/domain/enums/enums.dart';
@@ -70,7 +72,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Atualize os dados de sua Conta'),
+        title: const Text('Atualize os dados de sua Conta'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -82,15 +84,19 @@ class _EditUserPageState extends State<EditUserPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: dimens.paddingScreenAll * 2),
+              child: const LogoImage(radius: 80),
+            ),
             Form(
               key: _formKey,
               child: Column(
                 spacing: dimens.spacingVertical,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  LogoImage(radius: 80),
                   Row(
                     spacing: dimens.spacingHorizontal * 2,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         flex: 2,
@@ -129,6 +135,7 @@ class _EditUserPageState extends State<EditUserPage> {
                   ),
                   Row(
                     spacing: dimens.spacingHorizontal * 2,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: SecretTextField(
@@ -178,7 +185,7 @@ class _EditUserPageState extends State<EditUserPage> {
                   ),
                   InkWell(
                     borderRadius: dimens.borderRadius,
-                    onTap: () {},
+                    onTap: _goToAddressPage,
                     child: AbsorbPointer(
                       child: BasicTextField(
                         labelText: 'Endereço',
@@ -223,10 +230,17 @@ class _EditUserPageState extends State<EditUserPage> {
             ),
             Padding(
               padding: EdgeInsets.all(dimens.paddingScreenAll * 3),
-              child: BigButton(
-                color: colorScheme.primary,
-                label: 'Atualizar',
-                onPressed: _updateButton,
+              child: ListenableBuilder(
+                listenable: _editViewModel.update,
+                builder: (context, _) {
+                  return BigButton(
+                    color: colorScheme.primary,
+                    label: 'Atualizar',
+                    iconData: Icons.update_rounded,
+                    isRunning: _editViewModel.update.running,
+                    onPressed: _updateButton,
+                  );
+                },
               ),
             ),
           ],
@@ -240,19 +254,44 @@ class _EditUserPageState extends State<EditUserPage> {
       return;
     }
 
+    final currentUser = _editViewModel.currentUser!;
+
     User user = User(
+      id: currentUser.id,
       name: _nameController.text,
       addressId: null,
       document: _documentController.text,
       contact: _contactController.text,
       position: _selectedPosition,
       password: _passwordController.text,
+      createdAt: currentUser.createdAt,
+      updatedAt: DateTime.now(),
     );
 
     _editViewModel.update.execute(user);
   }
 
-  Future<void> _onUpdate() async {}
+  Future<void> _onUpdate() async {
+    if (_editViewModel.update.running) return;
+
+    final result = _editViewModel.update.result!;
+
+    result.fold(
+      onSuccess: (_) {
+        Navigator.pop(context);
+      },
+      onFailure: (err) {
+        final erroMessage = 'Desculpe. Ocorreu um erro inesperado.\n$err';
+        AppSnackBar.showBottom(
+          context,
+          title: 'Erro!',
+          iconTitle: Icons.error_rounded,
+          message: erroMessage,
+          duration: const Duration(seconds: 5),
+        );
+      },
+    );
+  }
 
   void _initializeForm() {
     final user = _editViewModel.currentUser;
@@ -265,5 +304,9 @@ class _EditUserPageState extends State<EditUserPage> {
     _confirmPasswordController.text = user.password ?? '';
     _contactController.text = user.contact;
     _documentController.text = user.document;
+  }
+
+  void _goToAddressPage() {
+    Navigator.pushNamed(context, Routes.address);
   }
 }

@@ -286,7 +286,8 @@ class JsonService {
   /// Returns `true` if the update is successful, otherwise logs the error and returns `false`.
   Future<bool> updateUser(User user) async {
     try {
-      if (_loggedUser == null || user.name != _loggedUser!.name) {
+      if (_loggedUser == null || user.id != _loggedUser!.id) {
+        log('${user.id} -> ${_loggedUser?.id}');
         throw Exception('only owner can change your informations');
       }
 

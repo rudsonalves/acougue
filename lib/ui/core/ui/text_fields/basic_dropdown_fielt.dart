@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class BasicDropdownField<T> extends StatelessWidget {
   final String? labelText;
+  final String? hintText;
   final T? value;
   final List<T> items;
   final String Function(T) itemLabel;
+  final FloatingLabelBehavior? floatingLabelBehavior;
   final ValueChanged<T?>? onChanged;
   final FormFieldValidator<T>? validator;
   final InputBorder? border;
@@ -14,9 +16,11 @@ class BasicDropdownField<T> extends StatelessWidget {
   const BasicDropdownField({
     super.key,
     this.labelText,
+    this.hintText,
     required this.value,
     required this.items,
     required this.itemLabel,
+    this.floatingLabelBehavior = FloatingLabelBehavior.always,
     this.onChanged,
     this.validator,
     this.border,
@@ -40,8 +44,13 @@ class BasicDropdownField<T> extends StatelessWidget {
             );
           }).toList(),
       decoration: InputDecoration(
+        floatingLabelBehavior: floatingLabelBehavior,
         prefixIcon: prefixIcon,
         labelText: labelText,
+        hintText: hintText,
+        hintStyle: TextStyle(
+          color: colorScheme.secondary.withValues(alpha: 0.6),
+        ),
         border:
             border ??
             OutlineInputBorder(

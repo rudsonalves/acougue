@@ -83,7 +83,7 @@ class AppSnackBar {
                 Text(title, style: textStyle.displayTextStyle),
               ],
             ),
-          if (title != null) Divider(),
+          if (title != null) const Divider(),
           Text(message, style: textStyle.bodyTextStyle),
         ],
       ),
