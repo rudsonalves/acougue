@@ -4,6 +4,52 @@ A new Flutter project.
 
 # ChangeLog
 
+## 2025/04/09 - version: 0.01.02+06
+
+### Add Support for Address Editing and Callback Integration
+ 
+This commit introduces support for editing existing addresses, including a callback mechanism to return address data to the previous screen. It also integrates full address display, dynamic navigation routing with arguments, and view model enhancements to retrieve address data by ID.
+
+### Modified Files
+- **.gitignore**
+  - Ignored the `/storage/` directory to prevent local test data from being committed.
+
+- **lib/domain/models/address.dart**
+  - Added a `fullAddress` getter to format address fields into a readable string.
+
+- **lib/main.dart**
+  - Switched from static route mapping to `onGenerateRoute` for dynamic navigation with arguments.
+
+- **lib/routing/router.dart**
+  - Refactored to use `onGenerateRoutes`.
+  - Address page now accepts and handles `addressId` and a `callBack` function via `RouteSettings.arguments`.
+
+- **lib/ui/features/address/address_page.dart**
+  - Added `callBack` and `addressId` parameters.
+  - Implemented `_initializeAddress()` to pre-fill form fields for editing.
+  - Updated `_onSaved()` to invoke the callback with the saved address object.
+
+- **lib/ui/features/address/address_view_model.dart**
+  - Added `_getAddress()` method and related `Command1` to retrieve address by ID.
+  - Updated state to store and expose the current address instance.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Updated to store and manage `addressId`.
+  - Calls the address page with current `addressId` and a callback.
+  - Receives the updated address and updates the UI accordingly.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Added `getAddress()` method to fetch address data.
+  - Stores and exposes the current address instance for UI consumption.
+
+### Deleted Files
+- **storage/data.json**
+  - Removed old mock data as persistent storage is now ignored via `.gitignore`.
+
+### Conclusion
+The app now supports full address editing and integrates a structured callback system to return data between views, enhancing the modularity and user flow for address management.
+
+
 ## 2025/04/09 - version: 0.01.01+05
 
 ### Add Address Management UI and Improve Validation Rules

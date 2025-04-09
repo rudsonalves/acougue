@@ -1,7 +1,8 @@
-import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/core/ui/messages/app_snack_bar.dart';
+import 'package:acougue/domain/models/address.dart';
 import 'package:flutter/material.dart';
 
+import '/routing/router.dart';
+import '/ui/core/ui/messages/app_snack_bar.dart';
 import '/domain/enums/enums.dart';
 import '/domain/models/user.dart';
 import '/ui/core/themes/dimens.dart';
@@ -35,6 +36,7 @@ class _EditUserPageState extends State<EditUserPage> {
   final _contactController = TextEditingController();
   final _documentController = TextEditingController();
   Positions _selectedPosition = Positions.employee;
+  String? _addressId;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -43,6 +45,7 @@ class _EditUserPageState extends State<EditUserPage> {
     _editViewModel = widget.editViewModel;
     _editViewModel.update.addListener(_onUpdate);
     _initializeForm();
+    _addressId = _editViewModel.currentUser?.addressId;
 
     super.initState();
   }
@@ -293,7 +296,7 @@ class _EditUserPageState extends State<EditUserPage> {
     );
   }
 
-  void _initializeForm() {
+  Future<void> _initializeForm() async {
     final user = _editViewModel.currentUser;
 
     if (user == null) return;
@@ -304,9 +307,28 @@ class _EditUserPageState extends State<EditUserPage> {
     _confirmPasswordController.text = user.password ?? '';
     _contactController.text = user.contact;
     _documentController.text = user.document;
+
+    if (user.addressId != null) {
+      _addressId = user.addressId;
+      await _editViewModel.getAddress.execute(_addressId!);
+
+      if (_editViewModel.address != null) {
+        _addressController.text = _editViewModel.address!.fullAddress;
+      }
+    }
   }
 
   void _goToAddressPage() {
-    Navigator.pushNamed(context, Routes.address);
+    Navigator.pushNamed(
+      context,
+      Routes.address,
+      arguments: {'callBack': _returningAddressPage, 'addressId': _addressId},
+    );
+  }
+
+  void _returningAddressPage(Address address) {
+    _addressId ??= address.id;
+
+    _addressController.text = address.fullAddress;
   }
 }
