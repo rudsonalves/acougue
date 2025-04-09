@@ -8,7 +8,7 @@ import 'data/services/json_service.dart';
 import '/utils/provider.dart';
 
 void main() {
-  final jsonService = JsonService('data.json');
+  final jsonService = JsonService('storage/data.json');
 
   runApp(
     MultiProvider(

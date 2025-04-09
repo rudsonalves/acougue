@@ -6,7 +6,7 @@ class User {
   final String? id;
   final String name;
   final String? password;
-  final String addressId;
+  final String? addressId;
   final String document;
   final String contact;
   final Positions position;
@@ -17,7 +17,7 @@ class User {
     this.id,
     required this.name,
     this.password,
-    required this.addressId,
+    this.addressId,
     required this.document,
     required this.contact,
     this.position = Positions.employee,
@@ -74,7 +74,7 @@ class User {
       id: map['id'] as String?,
       name: map['name'] as String,
       password: map['password'] as String?,
-      addressId: map['addressId'] as String,
+      addressId: map['addressId'] as String?,
       document: map['document'] as String,
       contact: map['contact'] as String,
       position: Positions.values.byName(map['position'] as String),

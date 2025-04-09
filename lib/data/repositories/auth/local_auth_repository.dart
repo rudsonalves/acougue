@@ -28,12 +28,12 @@ class LocalAuthRepository implements AuthRepository {
         throw Exception('Don\'t do auto login.');
       }
 
-      final user = await _database.signIn('admin', users.first.password!);
-      if (user == null) {
+      _user = await _database.signIn('admin', users.first.password!);
+      if (_user == null) {
         throw Exception('login fail');
       }
 
-      return Result.success(user);
+      return Result.success(_user!);
     } on Exception catch (err) {
       _user = null;
       log(err.toString());
@@ -66,6 +66,22 @@ class LocalAuthRepository implements AuthRepository {
 
       return Result.success(null);
     } on Exception catch (err) {
+      log(err.toString());
+      return Result.failure(err);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateUser(User user) async {
+    try {
+      final response = await _database.updateUser(user);
+      if (!response) {
+        throw Exception('update fail');
+      }
+
+      return Result.success(null);
+    } on Exception catch (err) {
+      _user = null;
       log(err.toString());
       return Result.failure(err);
     }

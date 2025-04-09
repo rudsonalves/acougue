@@ -4,6 +4,79 @@ A new Flutter project.
 
 # ChangeLog
 
+## 2025/04/09 - version: 0.01.00+04
+
+### Add user editing functionality and refactor related structure
+
+This update introduces the ability for users to edit their profile data. A new `EditUserPage` and corresponding `EditViewModel` were created to manage the user update flow. Additionally, the `AuthRepository` was extended to support the update operation. Minor improvements and refactorings were also made throughout the app, including asset relocation and validation logic centralization.
+
+### Modified Files
+
+- **lib/data/repositories/auth/auth_repository.dart**
+  - Added new abstract method `updateUser(User user)` to support user profile updates.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Implemented the `updateUser` method using `_database.updateUser`.
+  - Updated internal user logic to reflect the most recent state upon update.
+
+- **lib/domain/models/user.dart**
+  - Made `addressId` nullable to allow optional address assignment.
+  - Updated the `fromMap` method accordingly.
+
+- **lib/main.dart**
+  - Changed JSON data path from `'data.json'` to `'storage/data.json'`.
+
+- **lib/routing/router.dart**
+  - Registered a new route `editUser` and wired it to `EditUserPage` and `EditViewModel`.
+
+- **lib/ui/core/ui/text_fields/basic_text_field.dart**
+  - Added `hintStyle` with semi-transparent secondary color for better visual consistency.
+
+- **lib/ui/features/sign_in/sign_in.dart**
+  - Adjusted import path for `logo_image.dart` due to file relocation.
+
+- **lib/ui/features/sign_up/sign_up_view_model.dart**
+  - Changed the sign-up logic to directly use `User` instead of `Credentials`.
+  - Removed the unused `Credentials` import.
+
+- **lib/ui/features/splash/splash_page.dart**
+  - Modified navigation to redirect to `EditUserPage` upon successful auto-login.
+
+- **lib/utils/validate.dart**
+  - Added a `generic` validator method to check for empty fields and minimum length.
+
+- **pubspec.yaml**
+  - Registered `storage/` as an assets path to accommodate the new data location.
+
+### New Files
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Implements a complete UI form for editing user information, including validation and layout logic.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Handles the business logic for user update requests, including calling the repository and managing results.
+
+- **lib/ui/core/ui/text_fields/basic_dropdown_fielt.dart**
+  - A reusable dropdown form field widget for use in user forms or other feature UIs.
+
+### Renamed Files
+
+- **lib/ui/core/ui/logo_image.dart** → **lib/ui/core/ui/images/logo_image.dart**
+  - File moved to a more appropriate directory for image-related components.
+
+- **data.json** → **storage/data.json**
+  - Relocated data file to the `storage/` folder for better separation of concerns.
+
+### Assets and Test Data
+
+- **assets/images/svg/logo.svg**
+  - Added a new SVG logo asset for use in UI components.
+
+### Conclusion
+
+The user profile editing flow is now fully integrated and functional, alongside related improvements and refactorings to the codebase.
+
+
 ## 2025/04/08 - version: 0.01.00+03
 
 This commit introduces the complete local authentication flow using a JSON-based service and implements a splash screen for auto-login logic.

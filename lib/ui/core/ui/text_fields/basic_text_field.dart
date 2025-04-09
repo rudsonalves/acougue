@@ -78,6 +78,9 @@ class _BasicTextFieldState extends State<BasicTextField> {
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,
+        hintStyle: TextStyle(
+          color: colorScheme.secondary.withValues(alpha: 0.6),
+        ),
         floatingLabelBehavior: widget.floatingLabelBehavior,
         border:
             widget.border ??
