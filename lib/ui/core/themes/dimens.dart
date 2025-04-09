@@ -53,7 +53,7 @@ abstract final class Dimens {
   factory Dimens.of(BuildContext context) => switch (MediaQuery.sizeOf(
     context,
   ).width) {
-    > 600 && < 840 => desktop,
+    > 600 => desktop,
     _ => mobile,
   };
 }
@@ -90,10 +90,10 @@ final class _DimensMobile extends Dimens {
 /// Desktop/Web dimensions
 final class _DimensDesktop extends Dimens {
   @override
-  final double paddingScreenAll = Dimens.paddingAll;
+  final double paddingScreenAll = 15.0;
 
   @override
-  final double paddingScreenHorizontal = 100.0;
+  final double paddingScreenHorizontal = 25.0;
 
   @override
   final double paddingScreenVertical = 64.0;

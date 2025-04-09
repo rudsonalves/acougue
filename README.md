@@ -4,6 +4,36 @@ A new Flutter project.
 
 # ChangeLog
 
+## 2025/04/09 - version: 0.10.00+07
+
+### Enhance Address and User Form Usability with Layout and Behavior Updates
+
+This commit improves form input usability and layout consistency across the address and user editing interfaces. It includes enhancements for responsive design, form interaction constraints (like `readOnly` fields), and layout alignment for better UX across screen sizes.
+
+### Modified Files
+
+- **lib/ui/core/themes/dimens.dart**
+  - Adjusted `desktop` layout values:
+    - Changed `paddingScreenAll` from shared `Dimens.paddingAll` to fixed `15.0`.
+    - Reduced `paddingScreenHorizontal` from `100.0` to `25.0` for better usability on wider screens.
+
+- **lib/ui/core/ui/text_fields/basic_text_field.dart**
+  - Added a `readOnly` parameter to allow non-editable text fields.
+  - Passed the `readOnly` flag to the `TextFormField` widget.
+
+- **lib/ui/features/address/address_page.dart**
+  - Triggered a `setState()` call after address initialization to ensure form fields are updated visually when loading existing address data.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Marked the address field as `readOnly` to prevent manual editing; navigation to a specific form page is now required for updates.
+  - Refactored the layout for "Contato" and "Documento" fields into a horizontal row using `Expanded`, enhancing UI consistency and readability.
+  - Called `setState()` after loading and populating the address data to ensure immediate UI refresh.
+
+### Conclusão
+
+These adjustments significantly improve form behavior, visual consistency, and user interaction flow, particularly on desktop screens or wider mobile devices. The changes ensure data is correctly displayed and edited only through designated workflows.
+
+
 ## 2025/04/09 - version: 0.01.02+06
 
 ### Add Support for Address Editing and Callback Integration

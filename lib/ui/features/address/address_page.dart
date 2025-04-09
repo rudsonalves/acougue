@@ -306,5 +306,7 @@ class _AddressPageState extends State<AddressPage> {
     _cityController.text = address.city;
     _selectedState = BrStates.values.byName(address.state);
     _selectedAddressType = address.type;
+
+    setState(() {});
   }
 }

@@ -18,6 +18,7 @@ class BasicTextField extends StatefulWidget {
   final void Function()? onEditingComplete;
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
+  final bool readOnly;
 
   const BasicTextField({
     super.key,
@@ -36,6 +37,7 @@ class BasicTextField extends StatefulWidget {
     this.focusNode,
     this.onEditingComplete,
     this.validator,
+    this.readOnly = false,
   });
 
   @override
@@ -68,6 +70,7 @@ class _BasicTextFieldState extends State<BasicTextField> {
       autovalidateMode: autoValidate,
       controller: widget.controller,
       focusNode: widget.focusNode,
+      readOnly: widget.readOnly,
       textCapitalization: widget.textCapitalization,
       textInputAction: widget.textInputAction,
       keyboardType: widget.keyboardType,

@@ -194,6 +194,7 @@ class _EditUserPageState extends State<EditUserPage> {
                         labelText: 'Endereço',
                         hintText: 'Clique para adicionar um endereço.',
                         controller: _addressController,
+                        readOnly: true,
                         validator:
                             _selectedPosition == Positions.admin
                                 ? null
@@ -206,27 +207,36 @@ class _EditUserPageState extends State<EditUserPage> {
                       ),
                     ),
                   ),
-                  BasicTextField(
-                    labelText: 'Contato',
-                    hintText: 'Adicione um telefone para contato.',
-                    controller: _contactController,
-                    validator: Validate.generic,
-                    // focusNode: _contactFocusNode,
-                    prefixIcon: Icon(
-                      Icons.contact_phone_rounded,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                  BasicTextField(
-                    labelText: 'Documento (RG/CNH)',
-                    hintText: 'Número de seu RG ou CNH',
-                    controller: _documentController,
-                    keyboardType: TextInputType.number,
-                    validator: Validate.generic,
-                    prefixIcon: Icon(
-                      Icons.badge_rounded,
-                      color: colorScheme.primary,
-                    ),
+                  Row(
+                    spacing: dimens.spacingHorizontal * 2,
+                    children: [
+                      Expanded(
+                        child: BasicTextField(
+                          labelText: 'Contato',
+                          hintText: 'Adicione um telefone para contato.',
+                          controller: _contactController,
+                          validator: Validate.generic,
+                          // focusNode: _contactFocusNode,
+                          prefixIcon: Icon(
+                            Icons.contact_phone_rounded,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: BasicTextField(
+                          labelText: 'Documento (RG/CNH)',
+                          hintText: 'Número de seu RG ou CNH',
+                          controller: _documentController,
+                          keyboardType: TextInputType.number,
+                          validator: Validate.generic,
+                          prefixIcon: Icon(
+                            Icons.badge_rounded,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -316,6 +326,8 @@ class _EditUserPageState extends State<EditUserPage> {
         _addressController.text = _editViewModel.address!.fullAddress;
       }
     }
+
+    setState(() {});
   }
 
   void _goToAddressPage() {
