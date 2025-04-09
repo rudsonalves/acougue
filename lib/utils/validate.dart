@@ -1,4 +1,15 @@
 abstract final class Validate {
+  static String? generic(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Este campo é obrigatório.';
+    }
+
+    if (value.length < 5) {
+      return 'Deve ter no mínimo 5 caracteres.';
+    }
+    return null;
+  }
+
   /// Checks if a given email is valid.
   ///
   /// A email is valid if it is not null, not empty, and matches

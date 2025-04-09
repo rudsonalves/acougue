@@ -1,5 +1,5 @@
 import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/core/ui/logo_image.dart';
+import 'package:acougue/ui/core/ui/images/logo_image.dart';
 import 'package:flutter/material.dart';
 
 import '/ui/features/splash/splash_view_model.dart';
@@ -64,7 +64,7 @@ class _SplashPageState extends State<SplashPage> {
 
     result?.fold(
       onSuccess: (_) {
-        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, Routes.editUser);
       },
       onFailure: (_) {
         Navigator.pushReplacementNamed(context, Routes.signin);

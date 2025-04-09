@@ -9,4 +9,5 @@ abstract class AuthRepository {
   Future<Result<void>> addUser(User user);
   Future<Result<void>> signOut();
   Future<Result<void>> changePassword(String password);
+  Future<Result<void>> updateUser(User user);
 }

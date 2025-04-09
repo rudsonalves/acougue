@@ -1,4 +1,6 @@
 import 'package:acougue/data/repositories/auth/local_auth_repository.dart';
+import 'package:acougue/ui/features/edit_user/edit_user_page.dart';
+import 'package:acougue/ui/features/edit_user/edit_view_model.dart';
 import 'package:acougue/ui/features/sign_in/sign_in_view_model.dart';
 import 'package:acougue/ui/features/sign_up/sign_up_view_model.dart';
 import 'package:acougue/ui/features/splash/splash_page.dart';
@@ -19,6 +21,7 @@ final class Routes {
   static const String signin = '/signin';
   static const String signup = '/signup';
   static const String splash = '/splash';
+  static const String editUser = '/edit-user';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     Routes.home: (context) => const HomePage(),
@@ -37,6 +40,12 @@ final class Routes {
     Routes.splash:
         (context) => SplashPage(
           splashViewModel: SplashViewModel(
+            SimpleProvider.of<LocalAuthRepository>(context),
+          ),
+        ),
+    Routes.editUser:
+        (context) => EditUserPage(
+          editViewModel: EditViewModel(
             SimpleProvider.of<LocalAuthRepository>(context),
           ),
         ),

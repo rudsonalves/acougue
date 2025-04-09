@@ -8,7 +8,7 @@ import '/ui/core/ui/messages/app_snack_bar.dart';
 import '/ui/core/ui/text_fields/basic_text_field.dart';
 import '/ui/core/ui/text_fields/secret_text_field.dart';
 import '/utils/validate.dart';
-import '/ui/core/ui/logo_image.dart';
+import '../../core/ui/images/logo_image.dart';
 import '/ui/features/sign_in/sign_in_view_model.dart';
 import '/routing/router.dart';
 
