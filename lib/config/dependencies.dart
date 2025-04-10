@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '/data/repositories/freezers/local_freezers_repository.dart';
 import '/data/repositories/addresses/local_address_repository.dart';
 import '/data/repositories/auth/local_auth_repository.dart';
 import '/data/repositories/butcher_shop/local_butcher_shop_repository.dart';
@@ -23,6 +24,10 @@ List<Widget Function(Widget)> dependencies(JsonService jsonService) {
     ),
     (child) => SimpleProvider<LocalButcherShopRepository>(
       value: LocalButcherShopRepository(jsonService),
+      child: child,
+    ),
+    (child) => SimpleProvider<LocalFreezersRepository>(
+      value: LocalFreezersRepository(jsonService),
       child: child,
     ),
   ];

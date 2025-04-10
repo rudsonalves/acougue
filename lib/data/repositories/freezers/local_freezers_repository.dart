@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import '/utils/logger.dart';
 import '/data/repositories/common/collections.dart';
 import '/data/repositories/freezers/freezers_repository.dart';
 import '/data/services/json_service.dart';
@@ -9,17 +8,28 @@ import '/utils/result.dart';
 class LocalFreezersRepository implements FreezersRepository {
   final JsonService _jsonServer;
 
-  LocalFreezersRepository(this._jsonServer);
+  LocalFreezersRepository(this._jsonServer) {
+    _initialize();
+  }
 
   final Map<String, Freezer> _freezers = {};
 
   static const freezerCollection = Collections.freezers;
+
+  final logger = Logger('LocalFreezersRepository');
+
+  @override
+  Freezer? getFreezer(String id) => _freezers[id];
 
   @override
   Map<String, Freezer> get freezers => _freezers;
 
   @override
   List<Freezer> get freezersList => _freezers.values.toList();
+
+  Future<void> _initialize() async {
+    await getAll();
+  }
 
   @override
   Future<Result<Freezer>> add(Freezer freezer) async {
@@ -32,7 +42,7 @@ class LocalFreezersRepository implements FreezersRepository {
       final newFreezer = freezer.copyWith(id: uid);
       return Result.success(newFreezer);
     } on Exception catch (err) {
-      log('LocalFreezersRepository.add: $err');
+      logger.critical('add', err);
       return Result.failure(err);
     }
   }
@@ -49,28 +59,28 @@ class LocalFreezersRepository implements FreezersRepository {
       final freezer = Freezer.fromMap(map);
       return Result.success(freezer);
     } on Exception catch (err) {
-      log('LocalFreezersRepository.get: $err');
+      logger.critical('get', err);
       return Result.failure(err);
     }
   }
 
   @override
-  Future<Result<List<Freezer>>> getAll() async {
+  Future<Result<void>> getAll() async {
     try {
       final listMap = await _jsonServer.getAllFromCollection(freezerCollection);
 
       _freezers.clear();
       if (listMap.isEmpty) {
-        return const Result.success([]);
+        return const Result.success(null);
       }
 
       _freezers.addEntries(
         listMap.map((map) => MapEntry(map['id'], Freezer.fromMap(map))),
       );
 
-      return Result.success(_freezers.values.toList());
+      return const Result.success(null);
     } on Exception catch (err) {
-      log('LocalFreezersRepository.getAll: $err');
+      logger.critical('getAll', err);
       return Result.failure(err);
     }
   }
@@ -82,7 +92,7 @@ class LocalFreezersRepository implements FreezersRepository {
 
       return const Result.success(null);
     } on Exception catch (err) {
-      log('LocalFreezersRepository.get: $err');
+      logger.critical('get', err);
       return Result.failure(err);
     }
   }
@@ -94,7 +104,7 @@ class LocalFreezersRepository implements FreezersRepository {
 
       return Result.success(freezer);
     } on Exception catch (err) {
-      log('LocalFreezersRepository.add: $err');
+      logger.critical('add', err);
       return Result.failure(err);
     }
   }

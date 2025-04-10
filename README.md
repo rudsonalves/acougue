@@ -140,6 +140,62 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/10 - version: 0.10.04+11
+
+```markdown
+### Add Freezer Registration Feature with Edit and View Support
+
+This update introduces full support for managing freezers and cold storage units, including their creation, edition, and listing. It also updates the domain model and repository logic to handle new data properties, improves validation and state handling, and integrates these components into the routing and registration flows.
+
+### Modified Files
+
+- **lib/config/dependencies.dart**
+  - Registered `LocalFreezersRepository` in the dependency injection system.
+
+- **lib/data/repositories/freezers/freezers_repository.dart**
+  - Added `getFreezer(String id)` method.
+  - Changed return type of `getAll()` to `Result<void>` to reflect void result pattern.
+
+- **lib/data/repositories/freezers/local_freezers_repository.dart**
+  - Migrated to use internal logger instead of `log()`.
+  - Changed `getAll()` to load data into memory and return `Result<void>`.
+  - Added `_initialize()` to preload freezer data on repository instantiation.
+  - Added `getFreezer(id)` method to access cached data.
+
+- **lib/domain/models/freezer.dart**
+  - Added `maxVolume` and `maxPieces` fields to support storage limits.
+  - Updated constructor, `copyWith`, `toMap`, and `fromMap` methods accordingly.
+  - Enhanced `toString` for better debug output.
+
+- **lib/routing/router.dart**
+  - Added `Routes.freezers` and `Routes.editFreezer`.
+  - Registered `FreezersPage` and `EditFreezerPage` in the routes map.
+
+- **lib/ui/features/home/registrations/registrations_page.dart**
+  - Linked “Registro dos Freezers” button to navigate to the `FreezersPage`.
+
+### New Files
+
+- **lib/ui/core/ui/customs_edit_controllers/numeric_edit_controller.dart**
+  - Custom controller for numeric input fields with automatic validation, zero-stripping, and formatting.
+
+- **lib/ui/core/ui/messages/center_message_page.dart**
+  - Reusable widget to display a centered message with icon for empty states or alerts.
+
+- **lib/ui/features/home/registrations/freezers/edit_freezer/edit_freezer_page.dart**
+  - Full-featured form to create or edit freezer records, supporting both freezer and cold storage types.
+
+- **lib/ui/features/home/registrations/freezers/freezers_page.dart**
+  - Page listing all registered freezers with a floating action button to add a new one.
+
+- **lib/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart**
+  - ViewModel handling logic for saving and updating freezer data using repository methods and commands.
+
+### Conclusion
+
+The freezer registration module is now integrated into the system, with complete UI, validation, repository logic, and routing. All functionalities were tested and are working as expected.
+
+
 ## 2025/04/10 - version: 0.10.03+10
 
 ### Add Address Repository Initialization and Improve ButcherShop Display
