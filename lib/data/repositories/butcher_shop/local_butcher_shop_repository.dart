@@ -7,9 +7,9 @@ import '../../services/json_service.dart';
 import '/utils/result.dart';
 
 class LocalButcherShopRepository implements ButcherShopRepository {
-  final JsonService _database;
+  final JsonService _jsonServer;
 
-  LocalButcherShopRepository(this._database);
+  LocalButcherShopRepository(this._jsonServer);
 
   ButcherShop? _butcher;
 
@@ -23,8 +23,11 @@ class LocalButcherShopRepository implements ButcherShopRepository {
     try {
       // Clean the collection. This collection is only used to store the
       // one butcher shop
-      await _database.deleteCollection(butcherCollection);
-      await _database.insertIntoCollection(butcherCollection, butcher.toMap());
+      await _jsonServer.deleteCollection(butcherCollection);
+      await _jsonServer.insertIntoCollection(
+        butcherCollection,
+        butcher.toMap(),
+      );
       _butcher = butcher;
       return Result.success(_butcher!);
     } on Exception catch (err) {
@@ -36,7 +39,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   Future<Result<ButcherShop>> get() async {
     try {
-      final result = await _database.getAllFromCollection(butcherCollection);
+      final result = await _jsonServer.getAllFromCollection(butcherCollection);
 
       _butcher = ButcherShop.fromMap(result.first);
       return Result.success(_butcher!);
@@ -49,7 +52,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   Future<Result<void>> delete() async {
     try {
-      await _database.removeFromCollection(butcherCollection, _butcher!.id!);
+      await _jsonServer.removeFromCollection(butcherCollection, _butcher!.id!);
 
       _butcher = null;
       return const Result.success(null);
@@ -62,7 +65,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   Future<Result<void>> update(ButcherShop butcher) async {
     try {
-      await _database.updateInCollection(butcherCollection, butcher.toMap());
+      await _jsonServer.updateInCollection(butcherCollection, butcher.toMap());
       _butcher = butcher;
       return const Result.success(null);
     } on Exception catch (err) {

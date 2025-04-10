@@ -1,1 +1,1 @@
-enum Collections { butcher, addresses, users }
+enum Collections { butcher, addresses, users, freezers }

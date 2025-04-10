@@ -1,14 +1,20 @@
-import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/core/themes/brightness_controller.dart';
-import 'package:acougue/utils/provider.dart';
 import 'package:flutter/material.dart';
 
+import '/ui/core/themes/dimens.dart';
+import '/ui/core/themes/brightness_controller.dart';
+import '/ui/features/home/home_view_model.dart';
+import '/utils/provider.dart';
+
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final HomeViewModel homeViewModel;
+
+  const HomePage({super.key, required this.homeViewModel});
 
   @override
   Widget build(BuildContext context) {
     final brightness = NotifierProvider.of<BrightnessController>(context);
+    // final colorScheme = Theme.of(context).colorScheme;
+    final dimens = Dimens.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -30,11 +36,29 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: FilledButton(
-          onPressed: () {
-            Navigator.pushNamed(context, Routes.signin);
-          },
-          child: const Text('Ir para Login'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: dimens.spacingVertical,
+            children: [
+              FilledButton(
+                onPressed: () {},
+                child: const Text('Cadastrar Freezers'),
+              ),
+              FilledButton(
+                onPressed: () {},
+                child: const Text('Cadastrar Produtos'),
+              ),
+              FilledButton(
+                onPressed: () {},
+                child: const Text('Cadastrar Funcionários'),
+              ),
+              FilledButton(
+                onPressed: () {},
+                child: const Text('Cadastrar Validades'),
+              ),
+            ],
+          ),
         ),
       ),
     );

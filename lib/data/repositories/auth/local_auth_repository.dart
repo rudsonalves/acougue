@@ -8,9 +8,9 @@ import '/domain/models/user.dart';
 import '/utils/result.dart';
 
 class LocalAuthRepository implements AuthRepository {
-  final JsonService _database;
+  final JsonService _jsonServer;
 
-  LocalAuthRepository(this._database);
+  LocalAuthRepository(this._jsonServer);
 
   User? _user;
 
@@ -20,15 +20,15 @@ class LocalAuthRepository implements AuthRepository {
   @override
   Future<Result<User>> initialize() async {
     try {
-      await _database.open();
-      final usersMap = _database.usersMap.values;
+      await _jsonServer.open();
+      final usersMap = _jsonServer.usersMap.values;
       final users = usersMap.map((map) => User.fromMap(map)).toList();
 
       if (users.length != 1 || users.first.name != 'admin') {
         throw Exception('Don\'t do auto login.');
       }
 
-      _user = await _database.signIn('admin', users.first.password!);
+      _user = await _jsonServer.signIn('admin', users.first.password!);
       if (_user == null) {
         throw Exception('login fail');
       }
@@ -44,7 +44,7 @@ class LocalAuthRepository implements AuthRepository {
   @override
   Future<Result<User>> signIn(Credentials credentials) async {
     try {
-      _user = await _database.signIn(credentials.name, credentials.password);
+      _user = await _jsonServer.signIn(credentials.name, credentials.password);
 
       if (_user == null) {
         return Result.failure(Exception('login fail'));
@@ -66,7 +66,7 @@ class LocalAuthRepository implements AuthRepository {
       }
 
       final newUser = _user!.copyWith(password: password);
-      await _database.updateUser(newUser);
+      await _jsonServer.updateUser(newUser);
 
       return const Result.success(null);
     } on Exception catch (err) {
@@ -78,7 +78,7 @@ class LocalAuthRepository implements AuthRepository {
   @override
   Future<Result<void>> updateUser(User user) async {
     try {
-      final response = await _database.updateUser(user);
+      final response = await _jsonServer.updateUser(user);
       if (!response) {
         throw Exception('update fail');
       }
@@ -95,7 +95,7 @@ class LocalAuthRepository implements AuthRepository {
   Future<Result<void>> signOut() async {
     try {
       _user = null;
-      await _database.signOut();
+      await _jsonServer.signOut();
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
@@ -106,7 +106,7 @@ class LocalAuthRepository implements AuthRepository {
   @override
   Future<Result<void>> addUser(User user) async {
     try {
-      await _database.addUser(user);
+      await _jsonServer.addUser(user);
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());

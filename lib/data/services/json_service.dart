@@ -26,6 +26,8 @@ class JsonService {
     isOpen = false;
   }
 
+  static const _idLenght = 32;
+
   final math.Random _random = math.Random();
 
   Map<String, dynamic> _data = {};
@@ -434,7 +436,7 @@ class JsonService {
   ///
   /// The entry is removed from the collection and the database is saved
   /// immediately after removal.
-  Future<bool> removeFromCollection(Collections collection, String id) async {
+  Future<void> removeFromCollection(Collections collection, String id) async {
     try {
       if (!isOpen) await open();
 
@@ -448,10 +450,9 @@ class JsonService {
 
       _data[collection.name].remove(id);
       await _save();
-      return true;
     } catch (err) {
       log('JsonDatabaseService.removeFromCollection: $err');
-      return false;
+      rethrow;
     }
   }
 
@@ -466,7 +467,7 @@ class JsonService {
   ///
   /// The entry is updated in the collection and the database is saved
   /// immediately after update.
-  Future<bool> updateInCollection(
+  Future<void> updateInCollection(
     Collections collection,
     Map<String, dynamic> map,
   ) async {
@@ -484,10 +485,9 @@ class JsonService {
 
       _data[collection.name][id] = map;
       await _save();
-      return true;
     } catch (err) {
       log('JsonDatabaseService.updateInCollection: $err');
-      return false;
+      rethrow;
     }
   }
 
@@ -566,7 +566,7 @@ class JsonService {
   /// the probability of collision is extremely low.
   String _generateUid() {
     return List.generate(
-      32,
+      _idLenght,
       (_) => _random.nextInt(16).toRadixString(16),
     ).join();
   }

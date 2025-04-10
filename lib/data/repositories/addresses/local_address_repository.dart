@@ -7,9 +7,9 @@ import '../../services/json_service.dart';
 import '/utils/result.dart';
 
 class LocalAddressRepository implements AddressRepository {
-  final JsonService _database;
+  final JsonService _jsonServer;
 
-  LocalAddressRepository(this._database);
+  LocalAddressRepository(this._jsonServer);
 
   final _addresses = <String, Address>{};
 
@@ -24,7 +24,7 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<Address>> add(Address address) async {
     try {
-      final uid = await _database.insertIntoCollection(
+      final uid = await _jsonServer.insertIntoCollection(
         addressCollection,
         address.toMap(),
       );
@@ -40,7 +40,7 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<Address>> get(String id) async {
     try {
-      final map = await _database.getFromCollection(addressCollection, id);
+      final map = await _jsonServer.getFromCollection(addressCollection, id);
 
       if (map == null) {
         return Result.failure(Exception('Address not found'));
@@ -57,7 +57,7 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<void>> delete(String id) async {
     try {
-      await _database.removeFromCollection(addressCollection, id);
+      await _jsonServer.removeFromCollection(addressCollection, id);
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
@@ -68,7 +68,7 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<void>> update(Address address) async {
     try {
-      await _database.updateInCollection(addressCollection, address.toMap());
+      await _jsonServer.updateInCollection(addressCollection, address.toMap());
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());

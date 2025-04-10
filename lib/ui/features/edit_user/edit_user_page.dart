@@ -272,7 +272,7 @@ class _EditUserPageState extends State<EditUserPage> {
     User user = User(
       id: currentUser.id,
       name: _nameController.text,
-      addressId: null,
+      addressId: _addressId,
       document: _documentController.text,
       contact: _contactController.text,
       position: _selectedPosition,

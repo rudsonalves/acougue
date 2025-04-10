@@ -215,17 +215,15 @@ void main() {
       expect(map2, isNotNull);
       expect(map2!['value'], map['value']);
 
-      final remove = await dbServer.removeFromCollection(
-        Collections.addresses,
-        id,
+      await expectLater(
+        dbServer.removeFromCollection(Collections.addresses, id),
+        completes,
       );
-      expect(remove, true);
 
-      final remove2 = await dbServer.removeFromCollection(
-        Collections.addresses,
-        id,
+      await expectLater(
+        dbServer.removeFromCollection(Collections.addresses, id),
+        throwsException,
       );
-      expect(remove2, false);
 
       map.remove('id');
       final id2 = await dbServer.insertIntoCollection(
@@ -234,11 +232,11 @@ void main() {
       );
 
       final map3 = {'id': id2, 'value': 'Teste 2'};
-      final result = await dbServer.updateInCollection(
-        Collections.addresses,
-        map3,
+
+      await expectLater(
+        dbServer.updateInCollection(Collections.addresses, map3),
+        completes,
       );
-      expect(result, true);
 
       final map4 = await dbServer.getFromCollection(Collections.addresses, id2);
       expect(map4, isNotNull);
