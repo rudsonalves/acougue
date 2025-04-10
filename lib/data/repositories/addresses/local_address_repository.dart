@@ -9,7 +9,9 @@ import '/utils/result.dart';
 class LocalAddressRepository implements AddressRepository {
   final JsonService _jsonServer;
 
-  LocalAddressRepository(this._jsonServer);
+  LocalAddressRepository(this._jsonServer) {
+    _initialize();
+  }
 
   final _addresses = <String, Address>{};
 
@@ -20,6 +22,10 @@ class LocalAddressRepository implements AddressRepository {
 
   @override
   List<Address> get addressList => _addresses.values.toList();
+
+  Future<void> _initialize() async {
+    await getAll();
+  }
 
   @override
   Future<Result<Address>> add(Address address) async {
@@ -48,6 +54,25 @@ class LocalAddressRepository implements AddressRepository {
 
       final address = Address.fromMap(map);
       return Result.success(address);
+    } on Exception catch (err) {
+      log(err.toString());
+      return Result.failure(err);
+    }
+  }
+
+  @override
+  Future<Result<void>> getAll() async {
+    try {
+      final listMaps = await _jsonServer.getAllFromCollection(
+        addressCollection,
+      );
+
+      _addresses.clear();
+      _addresses.addEntries(
+        listMaps.map((map) => MapEntry(map['id'], Address.fromMap(map))),
+      );
+
+      return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
       return Result.failure(err);

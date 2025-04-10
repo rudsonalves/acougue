@@ -6,6 +6,7 @@ abstract class AddressRepository {
   List<Address> get addressList;
 
   Future<Result<Address>> get(String id);
+  Future<Result<void>> getAll();
   Future<Result<Address>> add(Address address);
   Future<Result<void>> update(Address address);
   Future<Result<void>> delete(String id);

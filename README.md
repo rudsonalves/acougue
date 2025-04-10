@@ -140,6 +140,55 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/10 - version: 0.10.03+10
+
+### Add Address Repository Initialization and Improve ButcherShop Display
+  
+This commit enhances the initialization of the `LocalAddressRepository` to automatically load existing addresses on startup. It also improves the modular organization by relocating `ButcherShopViewModel` to a dedicated `view_model` folder and enriches the `RegistrationsPage` with detailed Butcher Shop information, including address and formatted creation date.
+
+### Modified Files
+
+- **lib/data/repositories/addresses/address_repository.dart**
+  - Added new abstract method `getAll()` to retrieve all address records.
+
+- **lib/data/repositories/addresses/local_address_repository.dart**
+  - Implemented `getAll()` to fetch all address data from the local JSON service.
+  - Initialized address data on repository construction using `_initialize()`.
+
+- **lib/domain/models/butcher_shop.dart**
+  - Added a `toString()` method for easier debugging and logging.
+
+- **lib/routing/router.dart**
+  - Updated import paths to reflect relocation of `ButcherShopViewModel` into a `view_model` directory.
+  - Passed `ButcherShopViewModel` instance to `RegistrationsPage`.
+
+- **lib/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart**
+  - Updated import path for `ButcherShopViewModel`.
+
+- **lib/ui/features/home/registrations/registrations_page.dart**
+  - Changed to accept `ButcherShopViewModel` as a dependency.
+  - Displayed Butcher Shop details using a styled `Card`, including address and formatted date.
+  - Called `setState()` after returning from butcher registration to refresh data.
+
+- **lib/ui/features/home/registrations/view_model/butcher_shop_view_model.dart**
+  - Moved from previous location (`butcher_shop/`) to dedicated `view_model/` directory.
+  - Added access to all loaded addresses via `addresses` getter.
+
+### New File Paths
+
+- **lib/ui/features/home/registrations/view_model/butcher_shop_view_model.dart**
+  - Reorganized file previously located at `butcher_shop/butcher_shop_view_model.dart`.
+
+### Deleted Files
+
+- **lib/ui/features/home/registrations/registrations_view_model.dart**
+  - Removed unused placeholder ViewModel file.
+
+### Conclusion
+
+This update improves data availability at runtime by initializing address data early and enhances the user interface with detailed, contextual information about the butcher shop. It also promotes clearer architecture by reorganizing ViewModel files.
+
+
 ## 2025/04/10 - version: 0.10.02+09
 
 ### Add Butcher Shop Registration and Centralize Dependency Management

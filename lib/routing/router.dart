@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:acougue/data/repositories/butcher_shop/local_butcher_shop_repository.dart';
 import 'package:acougue/ui/features/home/home_view_model.dart';
 import 'package:acougue/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart';
-import 'package:acougue/ui/features/home/registrations/butcher_shop/butcher_shop_view_model.dart';
+import 'package:acougue/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
 import 'package:acougue/ui/features/home/registrations/registrations_page.dart';
 import '/data/repositories/addresses/local_address_repository.dart';
 import '/data/repositories/auth/local_auth_repository.dart';
@@ -57,7 +57,16 @@ final class Routes {
             ),
           ),
         ),
-    Routes.registrations: (context) => const RegistrationsPage(),
+    Routes.registrations:
+        (context) => RegistrationsPage(
+          butcherShopViewModel: ButcherShopViewModel(
+            addressRepository: SimpleProvider.of<LocalAddressRepository>(
+              context,
+            ),
+            butcherShopRepository:
+                SimpleProvider.of<LocalButcherShopRepository>(context),
+          ),
+        ),
     Routes.butcherShop:
         (context) => ButcherShopPage(
           butcherShopViewModel: ButcherShopViewModel(

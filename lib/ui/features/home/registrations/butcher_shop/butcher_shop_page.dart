@@ -9,7 +9,7 @@ import '/routing/router.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/text_fields/basic_text_field.dart';
 import '/utils/validate.dart';
-import '/ui/features/home/registrations/butcher_shop/butcher_shop_view_model.dart';
+import '../view_model/butcher_shop_view_model.dart';
 
 class ButcherShopPage extends StatefulWidget {
   final ButcherShopViewModel butcherShopViewModel;

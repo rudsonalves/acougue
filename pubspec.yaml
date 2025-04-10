@@ -1,7 +1,7 @@
 name: acougue
 description: "A new Flutter project."
 publish_to: 'none' 
-version: 0.10.02+09
+version: 0.10.03+10
 
 environment:
   sdk: ^3.7.2

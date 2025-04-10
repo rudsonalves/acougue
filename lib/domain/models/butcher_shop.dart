@@ -63,4 +63,14 @@ class ButcherShop {
               : null,
     );
   }
+
+  @override
+  String toString() {
+    return 'ButcherShop(id: $id,'
+        ' name: $name,'
+        ' description: $description,'
+        ' addressId: $addressId,'
+        ' createdAt: $createdAt,'
+        ' updatedAt: $updatedAt)';
+  }
 }

@@ -29,6 +29,7 @@ class ButcherShopViewModel {
 
   Address? _address;
   Address? get address => _address;
+  Map<String, Address> get addresses => _addressRepository.addresses;
 
   Future<Result<void>> _update(ButcherShop butcher) async {
     final result = await _butcherShopRepository.update(butcher);
