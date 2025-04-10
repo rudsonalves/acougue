@@ -140,6 +140,107 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/10 - version: 0.10.02+09
+
+### Add Butcher Shop Registration and Centralize Dependency Management
+
+This commit introduces the full flow for Butcher Shop registration and centralizes provider injection into a dedicated dependency configuration file. It also adds a logger utility to improve error tracking and replaces direct logging with structured log messages. Additional refactors include directory adjustments and model refinements to enhance maintainability.
+
+### Modified Files
+
+- **lib/config/dependencies.dart**
+  - Added centralized list of providers (`dependencies()`) for core services and repositories.
+
+- **lib/data/repositories/auth/auth_repository.dart**
+  - Updated import path for `Credentials` from `models` to `dto`.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Adjusted import path to reflect `dto` relocation.
+
+- **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**
+  - Triggered repository loading by calling `get()` in constructor.
+
+- **lib/data/services/json_service.dart**
+  - Introduced `Logger` for structured log output.
+  - Split `_open()` into `_loadJsonFile()` and `_createJsonFile()`.
+  - Added collection for `butcher_shop` and default record on creation.
+  - Replaced `log()` with `logger.critical()` in all exception handlers.
+  - Fixed collection insertion logic to append instead of overwrite.
+  - Improved function signatures and ensured `getAllFromCollection()` returns empty list if missing.
+
+- **lib/domain/models/credentials.dart** → **lib/domain/dto/credentials.dart**
+  - File moved to better reflect separation of concerns between DTOs and Models.
+
+- **lib/domain/models/address.dart**
+  - Improved logic for formatting `fullAddress` to omit `complement` when empty.
+
+- **lib/domain/models/butcher_shop.dart**
+  - Made `addressId` nullable to support initial setup without address.
+  - Updated mapping logic to handle `null` safely.
+
+- **lib/main.dart**
+  - Removed inline `MainApp` class.
+  - Initialized `JsonService` and opened the local JSON database.
+  - Used centralized `dependencies()` to inject services.
+
+- **lib/routing/router.dart**
+  - Registered new routes: `/registration` and `/butcher-shop`.
+  - Injected dependencies in `ButcherShopViewModel`.
+
+- **lib/ui/features/address/address_page.dart**
+  - Fixed logic in `_onSaved()` and `_onUpdated()` to handle success and failure explicitly.
+  - Ensured correct handling of new vs updated addresses by checking `_isUpdate`.
+
+- **lib/ui/features/address/address_view_model.dart**
+  - Fixed delayed state updates to use results from repository.
+  - Improved logging clarity.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Adjusted logic to preserve existing `_addressId` if already defined.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Refactored constructor to named parameters for clarity and consistency.
+
+- **lib/ui/features/home/home_page.dart**
+  - Changed to `StatefulWidget`.
+  - Added navigation to `RegistrationsPage`.
+
+- **lib/ui/features/sign_in/sign_in.dart**
+  - Updated import of `Credentials` to new `dto` location.
+
+- **lib/ui/features/sign_in/sign_in_view_model.dart**
+  - Updated import of `Credentials` to new `dto` location.
+
+### New Files
+
+- **lib/main_app.dart**
+  - Extracted `MainApp` widget from `main.dart` for clarity.
+  - Builds the root `MaterialApp` using `BrightnessController`.
+
+- **lib/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart**
+  - Implements full UI form for editing Butcher Shop information.
+  - Includes integration with address selector and date picker.
+
+- **lib/ui/features/home/registrations/butcher_shop/butcher_shop_view_model.dart**
+  - ViewModel to manage fetching and updating Butcher Shop data and address.
+
+- **lib/ui/features/home/registrations/registrations_page.dart**
+  - Landing page for different types of registrations (butcher, freezer, etc.).
+
+- **lib/ui/features/home/registrations/registrations_view_model.dart**
+  - Placeholder ViewModel for future expansion (currently empty).
+
+- **lib/utils/extensions.dart**
+  - Added `DateTime.toBrString()` for consistent Brazilian date formatting.
+
+- **lib/utils/logger.dart**
+  - Custom `Logger` class supporting color-coded terminal output and context tags.
+
+### Conclusion
+
+The butcher shop registration system is now fully integrated with a centralized architecture for dependency management, structured logging, and enhanced modularity.
+
+
 ## 2025/04/10 - version: 0.10.01+08
 
 ### Add freezer management feature and offline support improvements

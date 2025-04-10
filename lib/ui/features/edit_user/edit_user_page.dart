@@ -1,6 +1,6 @@
-import 'package:acougue/domain/models/address.dart';
 import 'package:flutter/material.dart';
 
+import '/domain/models/address.dart';
 import '/routing/router.dart';
 import '/ui/core/ui/messages/app_snack_bar.dart';
 import '/domain/enums/enums.dart';
@@ -25,6 +25,7 @@ class EditUserPage extends StatefulWidget {
 
 class _EditUserPageState extends State<EditUserPage> {
   late final EditViewModel _editViewModel;
+
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
   final _addressFocusNode = FocusNode();
@@ -339,7 +340,10 @@ class _EditUserPageState extends State<EditUserPage> {
   }
 
   void _returningAddressPage(Address address) {
-    _addressId ??= address.id;
+    _addressId =
+        _addressId == null || _addressId!.trim().isEmpty
+            ? address.id
+            : _addressId;
 
     _addressController.text = address.fullAddress;
   }

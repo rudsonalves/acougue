@@ -50,7 +50,7 @@ class _AddressPageState extends State<AddressPage> {
   void initState() {
     _addressViewModel = widget.addressViewModel;
     _addressViewModel.save.addListener(_onSaved);
-    _addressViewModel.update.addListener(_onSaved);
+    _addressViewModel.update.addListener(_onUpdated);
     _addressId = widget.addressId;
 
     if (_addressId != null && _addressId!.trim().isNotEmpty) {
@@ -71,7 +71,7 @@ class _AddressPageState extends State<AddressPage> {
     _cityController.dispose();
 
     _addressViewModel.save.removeListener(_onSaved);
-    _addressViewModel.update.removeListener(_onSaved);
+    _addressViewModel.update.removeListener(_onUpdated);
 
     super.dispose();
   }
@@ -272,7 +272,7 @@ class _AddressPageState extends State<AddressPage> {
     }
 
     final address = Address(
-      id: _addressId,
+      id: _isUpdate ? _addressId : null,
       type: _selectedAddressType,
       street: _streetController.text,
       number: _numberController.text,
@@ -283,22 +283,40 @@ class _AddressPageState extends State<AddressPage> {
       state: _selectedState!.name,
     );
 
-    if (_addressId == null) {
-      _addressViewModel.save.execute(address);
-    } else {
+    if (_isUpdate) {
       _addressViewModel.update.execute(address);
+    } else {
+      _addressViewModel.save.execute(address);
     }
   }
 
   void _onSaved() {
-    if (_addressViewModel.save.running || _addressViewModel.update.running) {
-      return;
-    }
+    if (_addressViewModel.save.running) return;
 
-    final result =
-        _isUpdate
-            ? _addressViewModel.update.result!
-            : _addressViewModel.save.result!;
+    final result = _addressViewModel.save.result!;
+
+    result.fold(
+      onSuccess: (address) {
+        widget.callBack(address);
+        Navigator.pop(context);
+      },
+      onFailure: (err) {
+        final erroMessage = 'Desculpe. Ocorreu um erro inesperado.\n$err';
+        AppSnackBar.showBottom(
+          context,
+          title: 'Erro!',
+          iconTitle: Icons.error_rounded,
+          message: erroMessage,
+          duration: const Duration(seconds: 5),
+        );
+      },
+    );
+  }
+
+  void _onUpdated() {
+    if (_addressViewModel.update.running) return;
+
+    final result = _addressViewModel.update.result!;
 
     result.fold(
       onSuccess: (_) {

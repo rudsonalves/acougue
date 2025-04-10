@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '/data/repositories/auth/auth_repository.dart';
-import '/domain/models/credentials.dart';
+import '../../../domain/dto/credentials.dart';
 import '/utils/commands.dart';
 import '/utils/result.dart';
 

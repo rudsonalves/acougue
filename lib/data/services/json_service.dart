@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:developer';
+import 'dart:math';
 
+import '/domain/models/butcher_shop.dart';
+import '/utils/logger.dart';
 import '/utils/validate.dart';
 import '/data/repositories/common/collections.dart';
 import '/domain/enums/enums.dart';
@@ -28,7 +29,7 @@ class JsonService {
 
   static const _idLenght = 32;
 
-  final math.Random _random = math.Random();
+  final Random _random = Random();
 
   Map<String, dynamic> _data = {};
 
@@ -39,6 +40,8 @@ class JsonService {
   Map<String, dynamic> get usersMap => _data[Collections.users.name];
 
   bool isOpen = false;
+
+  final logger = Logger('JsonService');
 
   /// Opens the database.
   ///
@@ -52,30 +55,51 @@ class JsonService {
     try {
       isOpen = true;
       if (await _file.exists()) {
-        final content = await _file.readAsString();
-        _data = json.decode(content) as Map<String, dynamic>;
+        await _loadJsonFile();
       } else {
-        await _file.create(recursive: true);
-        await _file.writeAsString(json.encode({}));
-        _data = <String, dynamic>{};
-        _data[Collections.users.name] = <String, dynamic>{};
-        final admin = User(
-          id: _generateUid(),
-          name: 'admin',
-          password: '123qwe',
-          addressId: '',
-          document: '',
-          contact: '',
-          position: Positions.admin,
-          createdAt: DateTime.now(),
-        );
-        _data[Collections.users.name][admin.id!] = admin.toMap();
-        await _save();
+        await _createJsonFile();
       }
     } on Exception catch (err) {
       isOpen = false;
+      logger.critical('open', err);
       throw Exception(err);
     }
+  }
+
+  Future<void> _loadJsonFile() async {
+    final content = await _file.readAsString();
+    _data = json.decode(content) as Map<String, dynamic>;
+  }
+
+  Future<void> _createJsonFile() async {
+    await _file.create(recursive: true);
+    await _file.writeAsString(json.encode({}));
+    _data = <String, dynamic>{};
+    _data[Collections.users.name] = <String, dynamic>{};
+    _data[Collections.butcher.name] = <String, dynamic>{};
+
+    // Initiate admin user
+    final admin = User(
+      id: _generateUid(),
+      name: 'admin',
+      password: '123qwe',
+      addressId: '',
+      document: '',
+      contact: '',
+      position: Positions.admin,
+      createdAt: DateTime.now(),
+    );
+    _data[Collections.users.name][admin.id!] = admin.toMap();
+
+    // Initiate Butcher Shop
+    final butcher = ButcherShop(
+      id: _generateUid(),
+      name: 'Configure um Nome',
+      description: 'Adicione uma descrição',
+    );
+    _data[Collections.butcher.name][butcher.id] = butcher.toMap();
+
+    await _save();
   }
 
   /// Signs in the user.
@@ -109,7 +133,7 @@ class JsonService {
       return _loggedUser!;
     } catch (err) {
       _loggedUser = null;
-      log('JsonDatabaseService.signIn: $err');
+      logger.critical('signIn', err);
       return null;
     }
   }
@@ -141,7 +165,7 @@ class JsonService {
       }
       return null;
     } catch (err) {
-      log('JsonDatabaseService._findUser: $err');
+      logger.critical('_findUser', err);
       return null;
     }
   }
@@ -204,7 +228,7 @@ class JsonService {
 
       return uid;
     } catch (err) {
-      log('JsonDatabaseService.signUp: $err');
+      logger.critical('signUp', err);
       return null;
     }
   }
@@ -270,7 +294,7 @@ class JsonService {
 
       return true;
     } catch (err) {
-      log('JsonDatabaseService.removeUser: $err');
+      logger.critical('removeUser', err);
       return false;
     }
   }
@@ -289,7 +313,6 @@ class JsonService {
   Future<bool> updateUser(User user) async {
     try {
       if (_loggedUser == null || user.id != _loggedUser!.id) {
-        log('${user.id} -> ${_loggedUser?.id}');
         throw Exception('only owner can change your informations');
       }
 
@@ -306,7 +329,7 @@ class JsonService {
       await _save();
       return true;
     } on Exception catch (err) {
-      log('JsonDatabaseService.updateUser: $err');
+      logger.critical('updateUser', err);
       return false;
     }
   }
@@ -334,6 +357,7 @@ class JsonService {
       _data.clear();
       isOpen = false;
     } catch (err) {
+      logger.critical('close', err);
       throw Exception(err);
     }
   }
@@ -357,6 +381,7 @@ class JsonService {
       _data[collection] = <String, dynamic>{};
       await _save();
     } catch (err) {
+      logger.critical('createCollection', err);
       throw Exception(err);
     }
   }
@@ -380,6 +405,7 @@ class JsonService {
       _data.remove(collection.name);
       await _save();
     } catch (err) {
+      logger.critical('deleteCollection', err);
       throw Exception(err);
     }
   }
@@ -416,11 +442,13 @@ class JsonService {
       // Generate a unique ID
       final uid = _generateUid();
       map['id'] = uid;
-      _data[collection.name] = {uid: map};
 
+      // save in database
+      _data[collection.name][uid] = map;
       await _save();
       return uid;
     } catch (err) {
+      logger.critical('insertIntoCollection', err);
       throw Exception(err);
     }
   }
@@ -451,7 +479,7 @@ class JsonService {
       _data[collection.name].remove(id);
       await _save();
     } catch (err) {
-      log('JsonDatabaseService.removeFromCollection: $err');
+      logger.critical('removeFromCollection', err);
       rethrow;
     }
   }
@@ -486,7 +514,7 @@ class JsonService {
       _data[collection.name][id] = map;
       await _save();
     } catch (err) {
-      log('JsonDatabaseService.updateInCollection: $err');
+      logger.critical('updateInCollection', err);
       rethrow;
     }
   }
@@ -502,10 +530,7 @@ class JsonService {
   ///
   /// The entry is not modified and the database is not saved after
   /// retrieval.
-  Future<Map<String, dynamic>?> getFromCollection(
-    Collections collection,
-    String id,
-  ) async {
+  Future<dynamic>? getFromCollection(Collections collection, String id) async {
     try {
       if (!isOpen) await open();
 
@@ -521,7 +546,7 @@ class JsonService {
 
       return _data[collection.name][id];
     } catch (err) {
-      log('getFromCollection: $err');
+      logger.critical('getFromCollection', err);
       return null;
     }
   }
@@ -534,18 +559,18 @@ class JsonService {
   /// Throws an exception if the collection does not exist.
   ///
   /// The database must be opened before calling this function.
-  Future<List<Map<String, dynamic>>> getAllFromCollection(
-    Collections collection,
-  ) async {
+  Future<List<dynamic>> getAllFromCollection(Collections collection) async {
     try {
       if (!isOpen) await open();
 
       if (!_data.containsKey(collection.name)) {
-        throw Exception('Collection ${collection.name} does not exist');
+        return [];
       }
 
-      return _data[collection.name].values.toList();
+      final registers = _data[collection.name];
+      return registers.values.toList();
     } catch (err) {
+      logger.critical('getAllFromCollection(${collection.name})', err);
       throw Exception(err);
     }
   }
