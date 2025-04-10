@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:acougue/domain/enums/enums.dart';
 
 class User {
@@ -84,22 +82,5 @@ class User {
               ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
               : null,
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'User(id: $id,'
-        ' name: $name,'
-        ' password: $password,'
-        ' addressId: $addressId,'
-        ' document: $document,'
-        ' contact: $contact,'
-        ' position: $position,'
-        ' createdAt: $createdAt,'
-        ' updatedAt: $updatedAt)';
   }
 }

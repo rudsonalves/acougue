@@ -1,8 +1,232 @@
-# acougue
+# Açougue Sabor da Morte
 
-A new Flutter project.
+## 1. Introdução
+
+**Contexto:**  
+O Sr. Jorge, proprietário de um conjunto de açougues, enfrenta multas decorrentes da comercialização de carnes com prazos de validade expirados. Em virtude disso, foi solicitado o desenvolvimento de uma solução offline que auxilie no controle dos prazos de validade dos estoques, evitando perdas e penalizações.
+
+**Objetivo Geral:**  
+Desenvolver um aplicativo offline para monitoramento e gerenciamento da validade dos produtos cárneos, permitindo o registro de cortes, acompanhamento dos prazos de vencimento e controle das movimentações do estoque.
+
+---
+
+## 2. Objetivos Específicos
+
+- **Controle de Validade:**  
+  Permitir o cadastro e monitoramento dos prazos de validade dos produtos, possibilitando notificações antecipadas, especialmente para produtos com vencimento inferior a uma semana.
+
+- **Gestão de Estoques e Movimentações:**  
+  Registrar as entradas e saídas dos produtos, com especial atenção às retiradas dos freezers, garantindo um controle rigoroso do estoque.
+
+- **Emissão de Etiquetas:**  
+  Gerar etiquetas para as embalagens com as informações essenciais (corte, validade, peso, data de vencimento e identificação do freezer de armazenamento).
+
+- **Dashboard Administrativo:**  
+  Disponibilizar um painel que consolide informações sobre estoques, descartes, próximos vencimentos e os funcionários responsáveis, facilitando a tomada de decisões.
+
+---
+
+## 3. Escopo do Projeto
+
+- **Ambiente Offline:**  
+  A aplicação deverá operar sem conexão com a internet, garantindo autonomia e confiabilidade, mesmo em ambientes com infraestrutura de rede limitada.
+
+- **Múltiplos Açougues:**  
+  O sistema deve suportar a gestão de diversos estabelecimentos, permitindo que cada açougue defina os próprios parâmetros para a duração dos produtos.
+
+- **Usuários:**  
+  O foco é em três perfis principais:  
+  - **Administradores:** Responsáveis por monitorar o painel de controle, analisar os relatórios de estoque e acompanhar as notificações de vencimento.
+  - **Gerentes:** Responsáveis pelas atividades em um estabelecimento, como o cadastro de pessoal, gerenciamento do sistema e controle de acessos.
+  - **Funcionários:** Responsáveis pelo registro dos cortes, lançamentos de movimentações e emissão de etiquetas.  
+
+---
+
+## 4. Requisitos Funcionais
+
+1. **Cadastro de Produtos:**
+   - **Informações Necessárias:**  
+     - *Corte:* Tipo de corte da carne.
+     - *Validades:* Definição de prazos específicos para cada tipo de carne, conforme a política de cada açougue.
+     - *Peso:* Quantidade registrada.
+     - *Data de Vencimento:* Prazo de validade individual.
+     - *Identificação do Freezer:* Local de armazenamento.
+   - **Geração de Etiquetas:**  
+     - Após o cadastro, o sistema deverá gerar automaticamente uma etiqueta para a embalagem, contendo todas as informações relevantes.
+
+2. **Notificações e Alertas:**
+   - Exibir anúncios dos produtos cujo vencimento esteja próximo, com destaque para aqueles com menos de uma semana para expiração.
+   - Notificar os responsáveis para que possam tomar medidas preventivas (como priorizar o consumo ou redirecionar a comercialização).
+
+3. **Registro de Movimentações:**
+   - Lançamento das saídas dos estoques e dos freezers, possibilitando a rastreabilidade de cada produto retirado.
+
+4. **Painel Administrativo:**
+   - Consolidação de informações em tempo real (dentro do ambiente offline) sobre:
+     - Níveis de estoque.
+     - Produtos descartados.
+     - Próximos vencimentos.
+     - Responsáveis pelas operações.
+
+---
+
+## 5. Requisitos Não Funcionais
+
+- **Operacionalidade Offline:**  
+  O sistema deverá ser capaz de funcionar de forma autônoma, sem dependência de conexão à internet, garantindo alta disponibilidade.
+
+- **Usabilidade e Interface:**  
+  Interface intuitiva e de fácil navegação, considerando que os usuários (funcionários e administradores) podem não ter elevado grau de familiaridade com tecnologias.
+
+- **Segurança:**  
+  Implementação de mecanismos para assegurar a integridade e confidencialidade dos dados, mesmo em ambiente local.
+
+- **Escalabilidade:**  
+  Capacidade de gerenciar múltiplos açougues com possíveis variações nos parâmetros de validade e processos internos.
+
+- **Confiabilidade:**  
+  Garantia de que os registros e notificações são precisos e atualizados, minimizando erros que possam resultar em perdas ou multas.
+
+---
+
+## 6. Considerações Técnicas e Opiniões
+
+- **Abordagem Offline:**  
+  A escolha por uma solução offline é pertinente, pois reduz riscos associados a instabilidades de conexão e garante operação contínua. Contudo, é crucial planejar uma estratégia de backup e, se possível, uma sincronização eventual para preservar os dados em caso de falhas do sistema.
+
+- **Customização por Unidade:**  
+  Permitir que cada açougue defina a duração dos produtos é uma decisão acertada, visto que diferentes estabelecimentos podem ter políticas e condições de armazenamento diversas. Essa flexibilidade deve ser refletida tanto no cadastro quanto na geração de alertas.
+
+- **Interface e Usabilidade:**  
+  A clareza na interface, especialmente para a emissão de etiquetas e lançamentos de movimentações, é fundamental. Recomenda-se a realização de testes com usuários finais para garantir que o fluxo seja intuitivo e que as notificações sejam destacadas de forma eficaz.
+
+- **Dashboard Administrativo:**  
+  A centralização das informações em um painel facilita a gestão estratégica e operacional. Recomenda-se a inclusão de gráficos e relatórios que auxiliem na visualização dos dados, mesmo que o sistema seja offline.
+
+- **Processos de Cadastro e Movimentação:**  
+  A integração entre o cadastro dos produtos e o registro das movimentações é essencial para manter a rastreabilidade e evitar discrepâncias nos estoques. É recomendável que o sistema possua validações rigorosas para evitar a entrada de dados incorretos.
+
+---
+
+## 7. Fluxo do Processo
+
+1. **Cadastro Inicial:**
+   - Funcionário registra o corte da carne com as informações necessárias.
+   - O sistema gera automaticamente uma etiqueta para a embalagem.
+
+2. **Monitoramento:**
+   - O aplicativo verifica os prazos de validade cadastrados.
+   - Produtos com vencimento em menos de uma semana são destacados na interface.
+
+3. **Registro de Saídas:**
+   - Cada retirada de produto do estoque ou freezer é lançada no sistema.
+   - O histórico de movimentações é atualizado para fins de auditoria e controle.
+
+4. **Análise Administrativa:**
+   - Administradores acessam o painel para revisar estoques, descartes e próximos vencimentos.
+   - Relatórios e notificações auxiliam na tomada de decisão para evitar prejuízos e multas.
+
+---
+
+## 8. Conclusão
+
+A proposta apresentada busca oferecer uma solução robusta e customizável para o controle de prazos de validade em açougues, garantindo que as operações ocorram de forma segura e eficiente mesmo em ambientes offline. A ênfase na facilidade de uso, combinada com um sistema rigoroso de notificações e registros, contribuirá significativamente para a redução de perdas e a melhoria do gerenciamento de estoques. Em suma, o projeto não só atenderá às necessidades do Sr. Jorge, mas também poderá servir de modelo para outros estabelecimentos que enfrentem desafios similares.
+
+---
+
+Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do projeto, permitindo que as etapas seguintes (como a definição da arquitetura técnica, escolha de tecnologias e planejamento de testes) sejam realizadas de maneira organizada e fundamentada.
+
+
 
 # ChangeLog
+
+## 2025/04/10 - version: 0.10.01+08
+
+### Add freezer management feature and offline support improvements
+
+This commit introduces the foundational structure for managing freezers in the butcher shop application. It includes the creation of a `Freezer` model, associated repository interfaces, and local storage integration. Enhancements were also made to existing repositories and services to support modular and consistent offline operations. The README was significantly expanded to provide a clear, documented vision of the application scope and requirements.
+
+### Modified Files
+
+- **README.md**
+  - Replaced placeholder content with a detailed technical and functional description of the project's context, objectives, and structure.
+
+- **lib/data/repositories/addresses/address_repository.dart**
+  - Minor formatting adjustment for code clarity.
+
+- **lib/data/repositories/addresses/local_address_repository.dart**
+  - Renamed internal variable from `_database` to `_jsonServer` for better clarity and consistency with other repositories.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Replaced `_database` with `_jsonServer` to standardize terminology across repositories.
+
+- **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**
+  - Updated internal database reference naming for consistency.
+  - Formatted some calls across multiple lines for improved readability.
+
+- **lib/data/repositories/common/collections.dart**
+  - Added `freezers` to the `Collections` enum.
+
+- **lib/data/services/json_service.dart**
+  - Modified `removeFromCollection` and `updateInCollection` to return `void` and rethrow exceptions.
+  - Added constant `_idLength` to replace magic number in UID generation.
+
+- **lib/domain/enums/enums.dart**
+  - Added two new enums: `VolumetricUnit` and `FreezerType`, used for freezer representation.
+
+- **lib/domain/models/butcher_shop.dart**
+  - Removed `toJson`, `fromJson`, and `toString` methods to simplify the model.
+
+- **lib/domain/models/user.dart**
+  - Removed JSON serialization and `toString` methods, matching recent design decisions.
+
+- **lib/routing/router.dart**
+  - Injected `HomeViewModel` into `HomePage`.
+  - Removed `SignUpPage` and related imports, reflecting the removal of the sign-up feature.
+
+- **lib/ui/features/address/address_page.dart**
+  - Added support for address update flow (distinguishing between new and existing addresses).
+  - Modified form title, button label, and icon dynamically based on whether the page is in "edit" mode.
+  - Handled save/update execution and result callbacks accordingly.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Fixed bug by assigning `_addressId` to the `User` model during update.
+
+- **lib/ui/features/home/home_page.dart**
+  - Changed constructor to require `HomeViewModel`.
+  - Replaced login navigation with multiple buttons for freezer, product, employee, and validity registration.
+
+### New Files
+
+- **lib/data/repositories/freezers/freezers_repository.dart**
+  - Defines the abstract contract for freezer-related operations.
+
+- **lib/data/repositories/freezers/local_freezers_repository.dart**
+  - Implements freezer operations using the local JSON service.
+
+- **lib/domain/models/freezer.dart**
+  - Contains the `Freezer` model with fields, serialization methods, and a descriptive `toString`.
+
+- **lib/ui/features/home/home_view_model.dart**
+  - Basic `HomeViewModel` to support future state management for the home screen.
+
+- **test/data/repositories/freezers/local_freezers_repository_test.dart**
+  - Unit tests to verify CRUD functionality for the local freezer repository.
+
+### Deleted Files
+
+- **lib/ui/features/sign_up/sign_up_page.dart**
+- **lib/ui/features/sign_up/sign_up_view_model.dart**
+  - Removed sign-up functionality, possibly in favor of predefined users or admin-only account management.
+
+### Assets and Test Data
+
+- No assets or static test data added.
+
+### Conclusion
+
+The freezer module was successfully introduced along with supporting infrastructure for modular, local storage operations. The project documentation is now comprehensive, and the codebase is consistent with clean and scalable design principles.
+
 
 ## 2025/04/09 - version: 0.10.00+07
 

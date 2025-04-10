@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '/domain/enums/enums.dart';
@@ -42,14 +44,17 @@ class _AddressPageState extends State<AddressPage> {
   AddressType _selectedAddressType = AddressType.residential;
   BrStates? _selectedState;
   String? _addressId;
+  bool _isUpdate = false;
 
   @override
   void initState() {
     _addressViewModel = widget.addressViewModel;
     _addressViewModel.save.addListener(_onSaved);
+    _addressViewModel.update.addListener(_onSaved);
     _addressId = widget.addressId;
 
     if (_addressId != null && _addressId!.trim().isNotEmpty) {
+      _isUpdate = true;
       _initializeAddress();
     }
 
@@ -65,6 +70,9 @@ class _AddressPageState extends State<AddressPage> {
     _zipCodeController.dispose();
     _cityController.dispose();
 
+    _addressViewModel.save.removeListener(_onSaved);
+    _addressViewModel.update.removeListener(_onSaved);
+
     super.dispose();
   }
 
@@ -75,7 +83,7 @@ class _AddressPageState extends State<AddressPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Endereço'),
+        title: Text(_isUpdate ? 'Editar Endereço' : 'CriarEndereço'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -231,13 +239,20 @@ class _AddressPageState extends State<AddressPage> {
             Padding(
               padding: EdgeInsets.all(dimens.paddingScreenAll * 3),
               child: ListenableBuilder(
-                listenable: _addressViewModel.save,
+                listenable:
+                    _isUpdate
+                        ? _addressViewModel.update
+                        : _addressViewModel.save,
                 builder: (context, _) {
                   return BigButton(
                     color: Colors.blueAccent,
-                    isRunning: _addressViewModel.save.running,
-                    label: 'Salvar',
-                    iconData: Icons.save_rounded,
+                    isRunning:
+                        _isUpdate
+                            ? _addressViewModel.update.running
+                            : _addressViewModel.save.running,
+                    label: _isUpdate ? 'Atualizar' : 'Salvar',
+                    iconData:
+                        _isUpdate ? Icons.update_rounded : Icons.save_rounded,
                     onPressed: _saveButton,
                   );
                 },
@@ -257,6 +272,7 @@ class _AddressPageState extends State<AddressPage> {
     }
 
     final address = Address(
+      id: _addressId,
       type: _selectedAddressType,
       street: _streetController.text,
       number: _numberController.text,
@@ -267,13 +283,22 @@ class _AddressPageState extends State<AddressPage> {
       state: _selectedState!.name,
     );
 
-    _addressViewModel.save.execute(address);
+    if (_addressId == null) {
+      _addressViewModel.save.execute(address);
+    } else {
+      _addressViewModel.update.execute(address);
+    }
   }
 
   void _onSaved() {
-    if (_addressViewModel.save.running) return;
+    if (_addressViewModel.save.running || _addressViewModel.update.running) {
+      return;
+    }
 
-    final result = _addressViewModel.save.result!;
+    final result =
+        _isUpdate
+            ? _addressViewModel.update.result!
+            : _addressViewModel.save.result!;
 
     result.fold(
       onSuccess: (_) {
@@ -295,18 +320,24 @@ class _AddressPageState extends State<AddressPage> {
 
   Future<void> _initializeAddress() async {
     await _addressViewModel.getAddress.execute(_addressId!);
+    final result = _addressViewModel.getAddress.result!;
 
-    final address = _addressViewModel.address!;
+    result.fold(
+      onSuccess: (address) {
+        _streetController.text = address.street;
+        _numberController.text = address.number;
+        _complementController.text = address.complement!;
+        _neighborhoodController.text = address.neighborhood;
+        _zipCodeController.text = address.cep;
+        _cityController.text = address.city;
+        _selectedState = BrStates.values.byName(address.state);
+        _selectedAddressType = address.type;
 
-    _streetController.text = address.street;
-    _numberController.text = address.number;
-    _complementController.text = address.complement!;
-    _neighborhoodController.text = address.neighborhood;
-    _zipCodeController.text = address.cep;
-    _cityController.text = address.city;
-    _selectedState = BrStates.values.byName(address.state);
-    _selectedAddressType = address.type;
-
-    setState(() {});
+        setState(() {});
+      },
+      onFailure: (err) {
+        log('Error: $err');
+      },
+    );
   }
 }

@@ -60,3 +60,24 @@ enum BrStates implements LabeledEnum {
 
   const BrStates(this.label);
 }
+
+enum VolumetricUnit implements LabeledEnum {
+  liters('l'),
+  cubicMeters('m³'),
+  pieces('peças');
+
+  @override
+  final String label;
+
+  const VolumetricUnit(this.label);
+}
+
+enum FreezerType implements LabeledEnum {
+  coldStorage('Câmera Frigorífica'),
+  freezer('Freezer');
+
+  @override
+  final String label;
+
+  const FreezerType(this.label);
+}
