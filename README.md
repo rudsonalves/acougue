@@ -142,7 +142,6 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 ## 2025/04/10 - version: 0.10.04+11
 
-```markdown
 ### Add Freezer Registration Feature with Edit and View Support
 
 This update introduces full support for managing freezers and cold storage units, including their creation, edition, and listing. It also updates the domain model and repository logic to handle new data properties, improves validation and state handling, and integrates these components into the routing and registration flows.
