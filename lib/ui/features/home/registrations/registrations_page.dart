@@ -1,6 +1,6 @@
-import 'package:acougue/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
+import 'package:acougue/utils/extensions.dart';
 import 'package:acougue/routing/router.dart';
 import 'package:acougue/ui/core/themes/dimens.dart';
 import 'package:acougue/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
@@ -27,7 +27,6 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final dimens = Dimens.of(context);
     final butcher = _butcherShopViewModel.butcherShop;
     final address = _butcherShopViewModel.addresses[butcher.addressId];
     final fullAddress = address != null ? '\n${address.fullAddress}' : '';
@@ -77,7 +76,7 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
                 ],
               ),
               FilledButton.icon(
-                onPressed: () {},
+                onPressed: _goToFreezersPage,
                 label: const Text('Registro dos Freezers'),
               ),
             ],
@@ -102,6 +101,11 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
 
   Future<void> _goToButcheRegistration() async {
     await Navigator.pushNamed(context, Routes.butcherShop);
+    setState(() {});
+  }
+
+  Future<void> _goToFreezersPage() async {
+    await Navigator.pushNamed(context, Routes.freezers);
     setState(() {});
   }
 }

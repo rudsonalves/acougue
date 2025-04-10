@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:acougue/data/repositories/butcher_shop/local_butcher_shop_repository.dart';
-import 'package:acougue/ui/features/home/home_view_model.dart';
-import 'package:acougue/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart';
-import 'package:acougue/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
-import 'package:acougue/ui/features/home/registrations/registrations_page.dart';
+import '/data/repositories/freezers/local_freezers_repository.dart';
+import '/ui/features/home/registrations/freezers/edit_freezer/edit_freezer_page.dart';
+import '/ui/features/home/registrations/freezers/freezers_page.dart';
+import '/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart';
+import '/data/repositories/butcher_shop/local_butcher_shop_repository.dart';
+import '/ui/features/home/home_view_model.dart';
+import '/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart';
+import '/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
+import '/ui/features/home/registrations/registrations_page.dart';
 import '/data/repositories/addresses/local_address_repository.dart';
 import '/data/repositories/auth/local_auth_repository.dart';
 import '/domain/models/address.dart';
@@ -32,6 +36,8 @@ final class Routes {
   static const String address = '/address';
   static const String registrations = '/registration';
   static const String butcherShop = '/butcher-shop';
+  static const String freezers = '/freezers';
+  static const String editFreezer = '/edit-freezer';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     Routes.home: (context) => HomePage(homeViewModel: HomeViewModel()),
@@ -75,6 +81,18 @@ final class Routes {
             ),
             butcherShopRepository:
                 SimpleProvider.of<LocalButcherShopRepository>(context),
+          ),
+        ),
+    Routes.freezers:
+        (context) => FreezersPage(
+          freezersViewModel: FreezersViewModel(
+            SimpleProvider.of<LocalFreezersRepository>(context),
+          ),
+        ),
+    Routes.editFreezer:
+        (context) => EditFreezerPage(
+          freezersViewModel: FreezersViewModel(
+            SimpleProvider.of<LocalFreezersRepository>(context),
           ),
         ),
   };
