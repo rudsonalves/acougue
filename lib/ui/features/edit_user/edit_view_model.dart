@@ -11,7 +11,11 @@ class EditViewModel {
   final AuthRepository _authRepository;
   final AddressRepository _addressRepository;
 
-  EditViewModel(this._authRepository, this._addressRepository) {
+  EditViewModel({
+    required AuthRepository authRepository,
+    required AddressRepository addressRepository,
+  }) : _authRepository = authRepository,
+       _addressRepository = addressRepository {
     update = Command1<void, User>(_update);
     getAddress = Command1<Address, String>(_getAddress);
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/domain/models/credentials.dart';
+import '../../../domain/dto/credentials.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/buttons/big_button.dart';
 import '/ui/core/ui/buttons/text_row_button.dart';

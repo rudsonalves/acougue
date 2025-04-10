@@ -1,6 +1,10 @@
-import 'package:acougue/ui/features/home/home_view_model.dart';
 import 'package:flutter/material.dart';
 
+import 'package:acougue/data/repositories/butcher_shop/local_butcher_shop_repository.dart';
+import 'package:acougue/ui/features/home/home_view_model.dart';
+import 'package:acougue/ui/features/home/registrations/butcher_shop/butcher_shop_page.dart';
+import 'package:acougue/ui/features/home/registrations/butcher_shop/butcher_shop_view_model.dart';
+import 'package:acougue/ui/features/home/registrations/registrations_page.dart';
 import '/data/repositories/addresses/local_address_repository.dart';
 import '/data/repositories/auth/local_auth_repository.dart';
 import '/domain/models/address.dart';
@@ -26,6 +30,8 @@ final class Routes {
   static const String splash = '/splash';
   static const String editUser = '/edit-user';
   static const String address = '/address';
+  static const String registrations = '/registration';
+  static const String butcherShop = '/butcher-shop';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     Routes.home: (context) => HomePage(homeViewModel: HomeViewModel()),
@@ -45,8 +51,21 @@ final class Routes {
     Routes.editUser:
         (context) => EditUserPage(
           editViewModel: EditViewModel(
-            SimpleProvider.of<LocalAuthRepository>(context),
-            SimpleProvider.of<LocalAddressRepository>(context),
+            authRepository: SimpleProvider.of<LocalAuthRepository>(context),
+            addressRepository: SimpleProvider.of<LocalAddressRepository>(
+              context,
+            ),
+          ),
+        ),
+    Routes.registrations: (context) => const RegistrationsPage(),
+    Routes.butcherShop:
+        (context) => ButcherShopPage(
+          butcherShopViewModel: ButcherShopViewModel(
+            addressRepository: SimpleProvider.of<LocalAddressRepository>(
+              context,
+            ),
+            butcherShopRepository:
+                SimpleProvider.of<LocalButcherShopRepository>(context),
           ),
         ),
   };

@@ -23,15 +23,16 @@ class AddressViewModel {
 
   Future<Result<Address>> _save(Address address) async {
     final result = await _addressRepository.add(address);
-    _address = address;
 
     await Future.delayed(const Duration(seconds: 2));
 
     result.fold(
-      onSuccess: (address) {
+      onSuccess: (newAddress) {
+        _address = newAddress;
         log('Address created');
       },
       onFailure: (err) {
+        _address = null;
         log('Error: $err');
       },
     );
@@ -41,16 +42,16 @@ class AddressViewModel {
 
   Future<Result<void>> _update(Address address) async {
     final result = await _addressRepository.update(address);
-    _address = address;
 
     await Future.delayed(const Duration(seconds: 2));
 
     result.fold(
-      onSuccess: (address) {
-        log('Address updated');
+      onSuccess: (_) {
+        _address = address;
+        log('Address updated', level: 1);
       },
       onFailure: (err) {
-        log('Error: $err');
+        log('Error: $err', level: 3);
       },
     );
 
@@ -65,6 +66,7 @@ class AddressViewModel {
     result.fold(
       onSuccess: (address) {
         _address = address;
+        log('Get address', level: 1);
       },
       onFailure: (err) {
         _address = null;

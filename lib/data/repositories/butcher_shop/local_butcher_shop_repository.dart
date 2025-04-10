@@ -9,7 +9,9 @@ import '/utils/result.dart';
 class LocalButcherShopRepository implements ButcherShopRepository {
   final JsonService _jsonServer;
 
-  LocalButcherShopRepository(this._jsonServer);
+  LocalButcherShopRepository(this._jsonServer) {
+    get();
+  }
 
   ButcherShop? _butcher;
 

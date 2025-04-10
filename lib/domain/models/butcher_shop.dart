@@ -2,7 +2,7 @@ class ButcherShop {
   final String? id;
   final String name;
   final String description;
-  final String addressId;
+  final String? addressId;
   final DateTime createdAt;
   final DateTime? updatedAt;
 
@@ -10,7 +10,7 @@ class ButcherShop {
     this.id,
     required this.name,
     required this.description,
-    required this.addressId,
+    this.addressId,
     DateTime? createdAt,
     this.updatedAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -55,7 +55,7 @@ class ButcherShop {
       id: map['id'] as String?,
       name: map['name'] as String,
       description: map['description'] as String,
-      addressId: map['addressId'] as String,
+      addressId: map['addressId'] as String?,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       updatedAt:
           map['updatedAt'] != null

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:acougue/routing/router.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/themes/brightness_controller.dart';
 import '/ui/features/home/home_view_model.dart';
 import '/utils/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final HomeViewModel homeViewModel;
 
   const HomePage({super.key, required this.homeViewModel});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final brightness = NotifierProvider.of<BrightnessController>(context);
@@ -37,13 +43,17 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: dimens.paddingScreenHorizontal,
+            vertical: dimens.paddingScreenVertical,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: dimens.spacingVertical,
             children: [
               FilledButton(
-                onPressed: () {},
-                child: const Text('Cadastrar Freezers'),
+                onPressed: _goToRegistrationsPage,
+                child: const Text('Registros'),
               ),
               FilledButton(
                 onPressed: () {},
@@ -62,5 +72,9 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _goToRegistrationsPage() {
+    Navigator.pushNamed(context, Routes.registrations);
   }
 }

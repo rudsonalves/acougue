@@ -27,8 +27,9 @@ class Address {
   });
 
   String get fullAddress =>
-      '$street, $number, $complement, '
-      '$neighborhood, $city - $state';
+      complement != null && complement!.isNotEmpty
+          ? '$street, $number, $complement, $neighborhood, $city - $state'
+          : '$street, $number, $neighborhood, $city - $state';
 
   Address copyWith({
     String? id,

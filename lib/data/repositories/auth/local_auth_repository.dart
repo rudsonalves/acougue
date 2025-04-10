@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:acougue/domain/models/credentials.dart';
+import 'package:acougue/domain/dto/credentials.dart';
 
 import '/data/repositories/auth/auth_repository.dart';
 import '../../services/json_service.dart';

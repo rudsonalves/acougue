@@ -1,6 +1,6 @@
-import 'package:acougue/domain/models/credentials.dart';
-import 'package:acougue/domain/models/user.dart';
-import 'package:acougue/utils/result.dart';
+import '/domain/dto/credentials.dart';
+import '/domain/models/user.dart';
+import '/utils/result.dart';
 
 abstract class AuthRepository {
   User? get user;
