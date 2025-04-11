@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart';
 import 'package:acougue/utils/extensions.dart';
 import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/core/themes/dimens.dart';
 import 'package:acougue/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
 
 class RegistrationsPage extends StatefulWidget {
   final ButcherShopViewModel butcherShopViewModel;
+  final FreezersViewModel freezersViewModel;
 
-  const RegistrationsPage({super.key, required this.butcherShopViewModel});
+  const RegistrationsPage({
+    super.key,
+    required this.butcherShopViewModel,
+    required this.freezersViewModel,
+  });
 
   @override
   State<RegistrationsPage> createState() => _RegistrationsPageState();
@@ -16,10 +21,12 @@ class RegistrationsPage extends StatefulWidget {
 
 class _RegistrationsPageState extends State<RegistrationsPage> {
   late final ButcherShopViewModel _butcherShopViewModel;
+  late final FreezersViewModel _freezersViewModel;
 
   @override
   void initState() {
     _butcherShopViewModel = widget.butcherShopViewModel;
+    _freezersViewModel = widget.freezersViewModel;
 
     super.initState();
   }
@@ -28,9 +35,11 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final butcher = _butcherShopViewModel.butcherShop;
+    final freezers = _freezersViewModel.freezersList;
     final address = _butcherShopViewModel.addresses[butcher.addressId];
     final fullAddress = address != null ? '\n${address.fullAddress}' : '';
     final width = MediaQuery.sizeOf(context).width;
+    final height = MediaQuery.sizeOf(context).height;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,25 +52,91 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                spacing: Dimens.paddingVertical,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: width * .35,
-                    child: Card(
-                      color: colorScheme.primaryContainer,
-                      child: Padding(
-                        padding: const EdgeInsets.all(Dimens.paddingAll / 2),
+              SizedBox(
+                width: width * .35,
+                height: height * .25,
+                child: InkWell(
+                  onTap: _goToButcheRegistration,
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    color: colorScheme.primaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      child: SizedBox(
+                        height: height * .23,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ListTile(
-                              title: Text(butcher.name),
-                              subtitle: Text(
-                                '${butcher.description}\nDesde:'
-                                ' ${butcher.createdAt.toBrString()}'
-                                '$fullAddress}',
+                            const Center(
+                              child: Text(
+                                'Regisrto Açougue',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              butcher.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              '${butcher.description}\nDesde:'
+                              ' ${butcher.createdAt.toBrString()}'
+                              '$fullAddress}',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: width * .35,
+                height: height * .25,
+                child: InkWell(
+                  onTap: _goToFreezersPage,
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    color: colorScheme.primaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      child: SizedBox(
+                        height: height * .23,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Câmeras/Freezers',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: freezers.length,
+                                itemBuilder:
+                                    (context, index) => ListTile(
+                                      title: Text(freezers[index].name),
+                                    ),
                               ),
                             ),
                           ],
@@ -69,15 +144,7 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
                       ),
                     ),
                   ),
-                  FilledButton.icon(
-                    onPressed: _goToButcheRegistration,
-                    label: const Text('Registro do Açougue'),
-                  ),
-                ],
-              ),
-              FilledButton.icon(
-                onPressed: _goToFreezersPage,
-                label: const Text('Registro dos Freezers'),
+                ),
               ),
             ],
           ),
@@ -85,11 +152,11 @@ class _RegistrationsPageState extends State<RegistrationsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               FilledButton.icon(
-                onPressed: () {},
+                onPressed: null,
                 label: const Text('Registro dos Funcionários'),
               ),
               FilledButton.icon(
-                onPressed: () {},
+                onPressed: null,
                 label: const Text('Registro das Validades'),
               ),
             ],

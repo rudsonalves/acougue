@@ -1,6 +1,7 @@
-import 'package:acougue/routing/router.dart';
 import 'package:flutter/material.dart';
 
+import '/domain/enums/enums.dart';
+import '/routing/router.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/ui/messages/center_message_page.dart';
 import '/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart';
@@ -36,7 +37,7 @@ class _FreezersPageState extends State<FreezersPage> {
         elevation: 5,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _goToEditFreezer,
+        onPressed: _goToAddFreezer,
         child: const Icon(Icons.add),
       ),
       body:
@@ -53,8 +54,19 @@ class _FreezersPageState extends State<FreezersPage> {
                   ListView.builder(
                     shrinkWrap: true,
                     itemBuilder:
-                        (context, index) =>
-                            ListTile(title: Text(freezers[index].name)),
+                        (context, index) => ListTile(
+                          leading: Icon(
+                            freezers[index].type == FreezerType.freezer
+                                ? Icons.kitchen_rounded
+                                : Icons.ac_unit_rounded,
+                          ),
+                          title: Text(freezers[index].name),
+                          subtitle: Text(
+                            '${freezers[index].description} - '
+                            '${freezers[index].location}',
+                          ),
+                          onTap: () => _goToEditFreezer(freezers[index].id!),
+                        ),
                     itemCount: freezers.length,
                   ),
                 ],
@@ -62,8 +74,17 @@ class _FreezersPageState extends State<FreezersPage> {
     );
   }
 
-  Future<void> _goToEditFreezer() async {
+  Future<void> _goToAddFreezer() async {
     await Navigator.pushNamed(context, Routes.editFreezer);
+    setState(() {});
+  }
+
+  Future<void> _goToEditFreezer(String freezerId) async {
+    await Navigator.pushNamed(
+      context,
+      Routes.editFreezer,
+      arguments: {'freezerId': freezerId},
+    );
     setState(() {});
   }
 }

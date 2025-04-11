@@ -394,15 +394,15 @@ class JsonService {
   ///
   /// The collection and all its contents are deleted.
   ///
-  Future<void> deleteCollection(Collections collection) async {
+  Future<void> deleteCollection(String collection) async {
     try {
       if (!isOpen) await open();
 
-      if (!_data.containsKey(collection.name)) {
+      if (!_data.containsKey(collection)) {
         throw Exception('Collection $collection does not exist');
       }
 
-      _data.remove(collection.name);
+      _data.remove(collection);
       await _save();
     } catch (err) {
       logger.critical('deleteCollection', err);
@@ -423,15 +423,15 @@ class JsonService {
   /// The entry is added to the collection and the database is saved
   /// immediately after insertion.
   Future<String> insertIntoCollection(
-    Collections collection,
+    String collection,
     Map<String, dynamic> map,
   ) async {
     try {
       if (!isOpen) await open();
 
       // Create the collection if it doesn't exist
-      if (!_data.containsKey(collection.name)) {
-        _data[collection.name] = <String, dynamic>{};
+      if (!_data.containsKey(collection)) {
+        _data[collection] = <String, dynamic>{};
       }
 
       // Check if the 'id' key is null
@@ -444,7 +444,7 @@ class JsonService {
       map['id'] = uid;
 
       // save in database
-      _data[collection.name][uid] = map;
+      _data[collection][uid] = map;
       await _save();
       return uid;
     } catch (err) {
@@ -464,19 +464,19 @@ class JsonService {
   ///
   /// The entry is removed from the collection and the database is saved
   /// immediately after removal.
-  Future<void> removeFromCollection(Collections collection, String id) async {
+  Future<void> removeFromCollection(String collection, String id) async {
     try {
       if (!isOpen) await open();
 
-      if (!_data.containsKey(collection.name)) {
+      if (!_data.containsKey(collection)) {
         throw Exception('Collection $collection does not exist');
       }
 
-      if (!_data[collection.name].containsKey(id)) {
+      if (!_data[collection].containsKey(id)) {
         throw Exception('Id $id does not exist');
       }
 
-      _data[collection.name].remove(id);
+      _data[collection].remove(id);
       await _save();
     } catch (err) {
       logger.critical('removeFromCollection', err);
@@ -496,22 +496,22 @@ class JsonService {
   /// The entry is updated in the collection and the database is saved
   /// immediately after update.
   Future<void> updateInCollection(
-    Collections collection,
+    String collection,
     Map<String, dynamic> map,
   ) async {
     try {
       if (!isOpen) await open();
 
-      if (!_data.containsKey(collection.name)) {
-        throw Exception('Collection ${collection.name} does not exist');
+      if (!_data.containsKey(collection)) {
+        throw Exception('Collection ${collection} does not exist');
       }
 
       final id = map['id'];
-      if (!_data[collection.name].containsKey(id)) {
+      if (!_data[collection].containsKey(id)) {
         throw Exception('Id $id does not exist');
       }
 
-      _data[collection.name][id] = map;
+      _data[collection][id] = map;
       await _save();
     } catch (err) {
       logger.critical('updateInCollection', err);
@@ -530,21 +530,21 @@ class JsonService {
   ///
   /// The entry is not modified and the database is not saved after
   /// retrieval.
-  Future<dynamic>? getFromCollection(Collections collection, String id) async {
+  Future<dynamic>? getFromCollection(String collection, String id) async {
     try {
       if (!isOpen) await open();
 
       // Check if the collection exists
-      if (!_data.containsKey(collection.name)) {
+      if (!_data.containsKey(collection)) {
         throw Exception('Collection $collection does not exist');
       }
 
       // Check if the id exists in collection
-      if (!_data[collection.name].containsKey(id)) {
+      if (!_data[collection].containsKey(id)) {
         throw Exception('Id $id does not exist in collection $collection');
       }
 
-      return _data[collection.name][id];
+      return _data[collection][id];
     } catch (err) {
       logger.critical('getFromCollection', err);
       return null;

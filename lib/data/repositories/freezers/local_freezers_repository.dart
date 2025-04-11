@@ -35,11 +35,12 @@ class LocalFreezersRepository implements FreezersRepository {
   Future<Result<Freezer>> add(Freezer freezer) async {
     try {
       final uid = await _jsonServer.insertIntoCollection(
-        freezerCollection,
+        freezerCollection.name,
         freezer.toMap(),
       );
 
       final newFreezer = freezer.copyWith(id: uid);
+      _freezers[uid] = newFreezer;
       return Result.success(newFreezer);
     } on Exception catch (err) {
       logger.critical('add', err);
@@ -50,7 +51,10 @@ class LocalFreezersRepository implements FreezersRepository {
   @override
   Future<Result<Freezer>> get(String id) async {
     try {
-      final map = await _jsonServer.getFromCollection(freezerCollection, id);
+      final map = await _jsonServer.getFromCollection(
+        freezerCollection.name,
+        id,
+      );
 
       if (map == null) {
         return Result.failure(Exception('Freezer not found'));
@@ -88,7 +92,7 @@ class LocalFreezersRepository implements FreezersRepository {
   @override
   Future<Result<void>> delete(String id) async {
     try {
-      await _jsonServer.removeFromCollection(freezerCollection, id);
+      await _jsonServer.removeFromCollection(freezerCollection.name, id);
 
       return const Result.success(null);
     } on Exception catch (err) {
@@ -100,7 +104,10 @@ class LocalFreezersRepository implements FreezersRepository {
   @override
   Future<Result<Freezer>> update(Freezer freezer) async {
     try {
-      await _jsonServer.updateInCollection(freezerCollection, freezer.toMap());
+      await _jsonServer.updateInCollection(
+        freezerCollection.name,
+        freezer.toMap(),
+      );
 
       return Result.success(freezer);
     } on Exception catch (err) {
