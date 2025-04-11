@@ -72,6 +72,9 @@ final class Routes {
             butcherShopRepository:
                 SimpleProvider.of<LocalButcherShopRepository>(context),
           ),
+          freezersViewModel: FreezersViewModel(
+            SimpleProvider.of<LocalFreezersRepository>(context),
+          ),
         ),
     Routes.butcherShop:
         (context) => ButcherShopPage(
@@ -85,12 +88,6 @@ final class Routes {
         ),
     Routes.freezers:
         (context) => FreezersPage(
-          freezersViewModel: FreezersViewModel(
-            SimpleProvider.of<LocalFreezersRepository>(context),
-          ),
-        ),
-    Routes.editFreezer:
-        (context) => EditFreezerPage(
           freezersViewModel: FreezersViewModel(
             SimpleProvider.of<LocalFreezersRepository>(context),
           ),
@@ -111,6 +108,17 @@ final class Routes {
                 addressId: adressId,
                 addressViewModel: AddressViewModel(
                   SimpleProvider.of<LocalAddressRepository>(context),
+                ),
+              ),
+        );
+      case Routes.editFreezer:
+        final freezerId = arguments?['freezerId'] as String?;
+        return MaterialPageRoute(
+          builder:
+              (context) => EditFreezerPage(
+                freezerId: freezerId,
+                freezersViewModel: FreezersViewModel(
+                  SimpleProvider.of<LocalFreezersRepository>(context),
                 ),
               ),
         );

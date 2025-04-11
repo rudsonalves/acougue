@@ -140,6 +140,50 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/11 - version: 0.10.05+12
+
+### Refactor JsonService to Use String-Based Collection Identifiers
+
+This update refactors the usage of the `JsonService` by replacing enum-based `Collections` parameters with simple `String` identifiers. This change standardizes collection access across the application and simplifies the service’s internal data structure. Affected repositories and routing logic were updated accordingly to align with this change.
+
+### Modified Files
+
+- **lib/data/repositories/addresses/local_address_repository.dart**
+  - Replaced enum-based `collection` access with `.name` string values for all JSON operations (`insert`, `get`, `remove`, `update`).
+
+- **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**
+  - Updated `deleteCollection`, `insertIntoCollection`, `removeFromCollection`, and `updateInCollection` to use `.name` strings instead of enum objects.
+
+- **lib/data/repositories/freezers/local_freezers_repository.dart**
+  - Applied `.name` for collection keys in all JSON service calls.
+  - Fixed missing insertion into `_freezers` map after adding a new freezer.
+
+- **lib/data/services/json_service.dart**
+  - Updated all public methods to receive `String collection` instead of `Collections enum`.
+  - Replaced internal usage of `collection.name` with direct string manipulation.
+  - Adjusted error handling and key checks accordingly.
+
+- **lib/routing/router.dart**
+  - Refactored routing to support passing arguments (`freezerId`) to `EditFreezerPage`.
+  - Moved freezer edit routing from static map to `onGenerateRoutes` for better argument handling.
+
+- **lib/ui/features/home/registrations/freezers/freezers_page.dart**
+  - Improved freezer listing with icons, description, and location.
+  - Replaced add/edit navigation logic to support parameter passing using `freezerId`.
+
+- **lib/ui/features/home/registrations/registrations_page.dart**
+  - Enhanced the UI to display butcher and freezer data inside interactive cards.
+  - Used `FreezersViewModel` to populate freezer information dynamically.
+  - Adjusted layout and interaction flow for better clarity and responsiveness.
+
+- **test/data/services/json_service_test.dart**
+  - Updated unit tests to use string identifiers in all JSON service method calls (`insert`, `get`, `remove`, `update`).
+
+### Conclusion
+
+This refactor improves code clarity and consistency by removing enum-based logic in the JSON service. All affected modules are updated and tested, ensuring the system remains stable and functional.
+
+
 ## 2025/04/10 - version: 0.10.04+11
 
 ### Add Freezer Registration Feature with Edit and View Support

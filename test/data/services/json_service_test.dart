@@ -204,41 +204,47 @@ void main() {
     test('Tadas os métodos Collection', () async {
       final map = {'value': 'Teste'};
       final id = await dbServer.insertIntoCollection(
-        Collections.addresses,
+        Collections.addresses.name,
         map,
       );
 
       final map1 = await dbServer.getAllFromCollection(Collections.addresses);
       expect(map1.first['value'], map['value']);
 
-      final map2 = await dbServer.getFromCollection(Collections.addresses, id);
+      final map2 = await dbServer.getFromCollection(
+        Collections.addresses.name,
+        id,
+      );
       expect(map2, isNotNull);
       expect(map2!['value'], map['value']);
 
       await expectLater(
-        dbServer.removeFromCollection(Collections.addresses, id),
+        dbServer.removeFromCollection(Collections.addresses.name, id),
         completes,
       );
 
       await expectLater(
-        dbServer.removeFromCollection(Collections.addresses, id),
+        dbServer.removeFromCollection(Collections.addresses.name, id),
         throwsException,
       );
 
       map.remove('id');
       final id2 = await dbServer.insertIntoCollection(
-        Collections.addresses,
+        Collections.addresses.name,
         map,
       );
 
       final map3 = {'id': id2, 'value': 'Teste 2'};
 
       await expectLater(
-        dbServer.updateInCollection(Collections.addresses, map3),
+        dbServer.updateInCollection(Collections.addresses.name, map3),
         completes,
       );
 
-      final map4 = await dbServer.getFromCollection(Collections.addresses, id2);
+      final map4 = await dbServer.getFromCollection(
+        Collections.addresses.name,
+        id2,
+      );
       expect(map4, isNotNull);
       expect(map4!['value'], map3['value']);
     });

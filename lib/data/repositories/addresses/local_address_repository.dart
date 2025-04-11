@@ -31,7 +31,7 @@ class LocalAddressRepository implements AddressRepository {
   Future<Result<Address>> add(Address address) async {
     try {
       final uid = await _jsonServer.insertIntoCollection(
-        addressCollection,
+        addressCollection.name,
         address.toMap(),
       );
 
@@ -46,7 +46,10 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<Address>> get(String id) async {
     try {
-      final map = await _jsonServer.getFromCollection(addressCollection, id);
+      final map = await _jsonServer.getFromCollection(
+        addressCollection.name,
+        id,
+      );
 
       if (map == null) {
         return Result.failure(Exception('Address not found'));
@@ -82,7 +85,7 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<void>> delete(String id) async {
     try {
-      await _jsonServer.removeFromCollection(addressCollection, id);
+      await _jsonServer.removeFromCollection(addressCollection.name, id);
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
@@ -93,7 +96,10 @@ class LocalAddressRepository implements AddressRepository {
   @override
   Future<Result<void>> update(Address address) async {
     try {
-      await _jsonServer.updateInCollection(addressCollection, address.toMap());
+      await _jsonServer.updateInCollection(
+        addressCollection.name,
+        address.toMap(),
+      );
       return const Result.success(null);
     } on Exception catch (err) {
       log(err.toString());
