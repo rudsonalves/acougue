@@ -34,41 +34,37 @@ class _HomePageState extends State<HomePage> {
               listenable: brightness,
               builder: (context, _) {
                 return Icon(
-                  brightness.isDark ? Icons.light_mode : Icons.dark_mode,
+                  brightness.isDark ? Icons.dark_mode : Icons.light_mode,
                 );
               },
             ),
           ),
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: dimens.paddingScreenHorizontal,
-            vertical: dimens.paddingScreenVertical,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: dimens.spacingVertical,
-            children: [
-              FilledButton(
-                onPressed: _goToRegistrationsPage,
-                child: const Text('Registros'),
-              ),
-              FilledButton(
-                onPressed: () {},
-                child: const Text('Cadastrar Produtos'),
-              ),
-              FilledButton(
-                onPressed: () {},
-                child: const Text('Cadastrar Funcionários'),
-              ),
-              FilledButton(
-                onPressed: () {},
-                child: const Text('Cadastrar Validades'),
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: EdgeInsets.all(dimens.paddingScreenAll),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: dimens.spacingVertical,
+          children: [
+            OverflowBar(
+              alignment: MainAxisAlignment.spaceAround,
+              children: [
+                FilledButton(
+                  onPressed: _goToRegistrationsPage,
+                  child: const Text('Registros'),
+                ),
+                FilledButton(
+                  onPressed: _goToProductsInput,
+                  child: const Text('Adicionar Produto'),
+                ),
+                const FilledButton(
+                  onPressed: null,
+                  child: Text('Cadastrar Pessoas'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -76,5 +72,9 @@ class _HomePageState extends State<HomePage> {
 
   void _goToRegistrationsPage() {
     Navigator.pushNamed(context, Routes.registrations);
+  }
+
+  void _goToProductsInput() {
+    Navigator.pushNamed(context, Routes.editProduct);
   }
 }

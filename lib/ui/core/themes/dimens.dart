@@ -73,7 +73,7 @@ final class _DimensMobile extends Dimens {
   final double profilePictureSize = 64.0;
 
   @override
-  final double spacingVertical = 20.0;
+  final double spacingVertical = 12.0;
 
   @override
   final double spacingHorizontal = 8.0;
@@ -96,16 +96,16 @@ final class _DimensDesktop extends Dimens {
   final double paddingScreenHorizontal = 25.0;
 
   @override
-  final double paddingScreenVertical = 64.0;
+  final double paddingScreenVertical = 32.0;
 
   @override
   final double profilePictureSize = 128.0;
 
   @override
-  final double spacingVertical = 12.0;
+  final double spacingVertical = 22.0;
 
   @override
-  final double spacingHorizontal = 8.0;
+  final double spacingHorizontal = 22.0;
 
   @override
   double get radius => 12.0;

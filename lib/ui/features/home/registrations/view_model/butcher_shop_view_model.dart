@@ -34,7 +34,7 @@ class ButcherShopViewModel {
   Future<Result<void>> _update(ButcherShop butcher) async {
     final result = await _butcherShopRepository.update(butcher);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (_) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '/data/repositories/products/local_products_repository.dart';
+import '/ui/features/home/edit_product/edit_product_page.dart';
+import '/ui/features/home/edit_product/product_view_model.dart';
 import '/data/repositories/freezers/local_freezers_repository.dart';
 import '/ui/features/home/registrations/freezers/edit_freezer/edit_freezer_page.dart';
 import '/ui/features/home/registrations/freezers/freezers_page.dart';
@@ -38,6 +41,7 @@ final class Routes {
   static const String butcherShop = '/butcher-shop';
   static const String freezers = '/freezers';
   static const String editFreezer = '/edit-freezer';
+  static const String editProduct = '/edit-products';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     Routes.home: (context) => HomePage(homeViewModel: HomeViewModel()),
@@ -119,6 +123,23 @@ final class Routes {
                 freezerId: freezerId,
                 freezersViewModel: FreezersViewModel(
                   SimpleProvider.of<LocalFreezersRepository>(context),
+                ),
+              ),
+        );
+      case Routes.editProduct:
+        final productId = arguments?['productId'] as String?;
+        return MaterialPageRoute(
+          builder:
+              (context) => EditProductPage(
+                productId: productId,
+                productsViewModel: ProductViewModel(
+                  freezersRepository:
+                      SimpleProvider.of<LocalFreezersRepository>(context),
+                  productsRepository:
+                      SimpleProvider.of<LocalProductsRepository>(context),
+                  authRepository: SimpleProvider.of<LocalAuthRepository>(
+                    context,
+                  ),
                 ),
               ),
         );
