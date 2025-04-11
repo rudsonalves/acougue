@@ -140,6 +140,68 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/11 - version: 0.50.00+16
+
+### Implement user management interface and employee listing
+
+This commit introduces a complete user management interface, allowing admin and manager roles to view and register users. It includes enhancements to authentication logic, enriched user metadata (with roles), and UI integration for listing and editing users. Routes and view models were updated accordingly.
+
+### Modified Files
+
+- **lib/data/repositories/auth/auth_repository.dart**
+  - Declared `getUser(String id)` method to retrieve a user by ID with access control.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Implemented role-based access control in `getUser`.
+  - Replaced `log` with structured `Logger` for error handling.
+  - Refactored and documented `_updateUserInfo`.
+  - Updated `addUser`, `updateUser`, and `signOut` to refresh user info cache.
+
+- **lib/data/repositories/products/products_repository.dart**
+  - Minor formatting adjustments to imports.
+
+- **lib/domain/dto/user_info.dart**
+  - Extended `UserInfo` with the `position` field (enum `Positions`) to indicate user role.
+
+- **lib/routing/router.dart**
+  - Added new route: `/employees` for the employee list screen.
+  - Updated `Routes.editUser` to support dynamic user editing via route arguments.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Refactored form to support both user creation and update.
+  - Adjusted the button logic and labels accordingly.
+  - Integrated `userId` argument to allow editing other users.
+  - Improved user data prefill logic using the view model’s `getUser`.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Added `add` and `getUser` commands.
+  - Enhanced logging with contextual tags.
+  - Improved control flow in `_getUser` and `_getAddress`.
+
+- **lib/ui/features/home/home_page.dart**
+  - Replaced static "Cadastrar Pessoas" button with functional "Empregados" button linking to the employee list.
+  - Hooked up route `/employees`.
+
+- **lib/ui/features/splash/splash_page.dart**
+  - Modified navigation after login to pass `userId` to `editUser` route.
+
+- **lib/ui/features/splash/splash_view_model.dart**
+  - Exposed `userId` for use during routing post-authentication.
+
+### New Files
+
+- **lib/ui/features/home/employees/employes_page.dart**
+  - UI screen listing all users using `UserInfo` metadata.
+  - Provides access to the user creation form.
+
+- **lib/ui/features/home/employees/employees_view_model.dart**
+  - View model to manage user metadata for the employee list screen.
+
+### Conclusão
+
+The user management functionality is now integrated and operational, supporting listing, editing, and registering users with proper role-based access control.
+
+
 ## 2025/04/11 - version: 0.20.02+15
 
 ### Enhance product lifecycle tracking and UI integration

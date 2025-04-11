@@ -64,7 +64,11 @@ class _SplashPageState extends State<SplashPage> {
 
     result?.fold(
       onSuccess: (_) {
-        Navigator.pushReplacementNamed(context, Routes.editUser);
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.editUser,
+          arguments: {'userId': widget.splashViewModel.userId},
+        );
       },
       onFailure: (_) {
         Navigator.pushReplacementNamed(context, Routes.signin);

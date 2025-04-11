@@ -1,5 +1,5 @@
-import 'package:acougue/domain/models/product.dart';
-import 'package:acougue/utils/result.dart';
+import '/domain/models/product.dart';
+import '/utils/result.dart';
 
 abstract class ProductsRepository {
   Map<String, Product> get products;

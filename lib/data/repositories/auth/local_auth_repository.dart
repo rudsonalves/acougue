@@ -1,7 +1,6 @@
-import 'dart:developer';
-
-import 'package:acougue/domain/dto/user_info.dart';
-
+import '/utils/logger.dart';
+import '/domain/dto/user_info.dart';
+import '/domain/enums/enums.dart';
 import '/domain/dto/credentials.dart';
 import '/data/repositories/auth/auth_repository.dart';
 import '../../services/json_service.dart';
@@ -16,6 +15,8 @@ class LocalAuthRepository implements AuthRepository {
   User? _user;
 
   final Map<String, UserInfo> _usersInfo = {};
+
+  final logger = Logger('LocalAuthRepository');
 
   @override
   List<UserInfo> get listUserInfo => _usersInfo.values.toList();
@@ -45,14 +46,19 @@ class LocalAuthRepository implements AuthRepository {
       return Result.success(_user!);
     } on Exception catch (err) {
       _user = null;
-      log(err.toString());
+      logger.critical('initialize', err);
       return Result.failure(err);
     } finally {
-      await _mountUserInfo();
+      await _updateUserInfo();
     }
   }
 
-  Future<void> _mountUserInfo() async {
+  /// Fetches all user information from the JSON database and updates
+  /// the local cache with user info entries mapped by user ID.
+  ///
+  /// This method clears the existing user info map and repopulates it
+  /// by converting the raw user data maps into `UserInfo` objects.
+  Future<void> _updateUserInfo() async {
     final usersMap = await _jsonServer.getAllFromCollection('users');
 
     _usersInfo.clear();
@@ -77,7 +83,7 @@ class LocalAuthRepository implements AuthRepository {
       return Result.success(_user!);
     } on Exception catch (err) {
       _user = null;
-      log(err.toString());
+      logger.critical('signIn', err);
       return Result.failure(err);
     }
   }
@@ -94,7 +100,7 @@ class LocalAuthRepository implements AuthRepository {
 
       return const Result.success(null);
     } on Exception catch (err) {
-      log(err.toString());
+      logger.critical('changePassword', err);
       return Result.failure(err);
     }
   }
@@ -107,10 +113,11 @@ class LocalAuthRepository implements AuthRepository {
         throw Exception('update fail');
       }
 
+      _updateUserInfo();
       return const Result.success(null);
     } on Exception catch (err) {
       _user = null;
-      log(err.toString());
+      logger.critical('updateUser', err);
       return Result.failure(err);
     }
   }
@@ -122,7 +129,7 @@ class LocalAuthRepository implements AuthRepository {
       await _jsonServer.signOut();
       return const Result.success(null);
     } on Exception catch (err) {
-      log(err.toString());
+      logger.critical('signOut', err);
       return Result.failure(err);
     }
   }
@@ -131,9 +138,42 @@ class LocalAuthRepository implements AuthRepository {
   Future<Result<void>> addUser(User user) async {
     try {
       await _jsonServer.addUser(user);
+
+      _updateUserInfo();
       return const Result.success(null);
     } on Exception catch (err) {
-      log(err.toString());
+      logger.critical('addUser', err);
+      return Result.failure(err);
+    }
+  }
+
+  @override
+  Future<Result<User>> getUser(String id) async {
+    try {
+      // Only logged user can excecute getUser
+      if (_user == null) {
+        throw Exception('user not logged in');
+      }
+
+      final userPos = _user!.position;
+
+      // Only admin or manager can execute getUser
+      if (userPos != Positions.admin && userPos != Positions.manager) {
+        throw Exception('only admin can get user info');
+      }
+
+      // Get user in id
+      final map = await _jsonServer.getFromCollection('users', id);
+      final user = User.fromMap(map);
+
+      // Only admin can get admin user
+      if (user.position == Positions.admin && userPos != Positions.admin) {
+        throw Exception('only admin can get admin user');
+      }
+
+      return Result.success(_user!);
+    } on Exception catch (err) {
+      logger.critical('getUser', err);
       return Result.failure(err);
     }
   }

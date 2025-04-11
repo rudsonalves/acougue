@@ -1,10 +1,9 @@
-import 'package:acougue/domain/models/product.dart';
 import 'package:flutter/material.dart';
 
-import 'package:acougue/domain/enums/enums.dart';
-import 'package:acougue/ui/features/home/widgets/home_header_row.dart';
-import 'package:acougue/utils/extensions.dart';
-
+import '/domain/models/product.dart';
+import '/domain/enums/enums.dart';
+import '/ui/features/home/widgets/home_header_row.dart';
+import '/utils/extensions.dart';
 import '/routing/router.dart';
 import '/ui/core/themes/dimens.dart';
 import '/ui/core/themes/brightness_controller.dart';
@@ -82,9 +81,9 @@ class _HomePageState extends State<HomePage> {
                   onPressed: _goToProductsInput,
                   child: const Text('Adicionar Produto'),
                 ),
-                const FilledButton(
-                  onPressed: null,
-                  child: Text('Cadastrar Pessoas'),
+                FilledButton(
+                  onPressed: _goToEmployees,
+                  child: const Text('Empregados'),
                 ),
               ],
             ),
@@ -178,6 +177,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       sortOrder = !sortOrder;
     });
+  }
+
+  Future<void> _goToEmployees() async {
+    await Navigator.pushNamed(context, Routes.employees);
+    setState(() {});
   }
 
   Future<void> _goToRegistrationsPage() async {

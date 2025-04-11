@@ -1,3 +1,5 @@
+import 'package:acougue/ui/features/home/employees/employees_view_model.dart';
+import 'package:acougue/ui/features/home/employees/employes_page.dart';
 import 'package:flutter/material.dart';
 
 import '/data/repositories/products/local_products_repository.dart';
@@ -42,6 +44,7 @@ final class Routes {
   static const String freezers = '/freezers';
   static const String editFreezer = '/edit-freezer';
   static const String editProduct = '/edit-products';
+  static const String employees = '/employees';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     Routes.home:
@@ -67,15 +70,6 @@ final class Routes {
         (context) => SplashPage(
           splashViewModel: SplashViewModel(
             SimpleProvider.of<LocalAuthRepository>(context),
-          ),
-        ),
-    Routes.editUser:
-        (context) => EditUserPage(
-          editViewModel: EditViewModel(
-            authRepository: SimpleProvider.of<LocalAuthRepository>(context),
-            addressRepository: SimpleProvider.of<LocalAddressRepository>(
-              context,
-            ),
           ),
         ),
     Routes.registrations:
@@ -107,12 +101,35 @@ final class Routes {
             SimpleProvider.of<LocalFreezersRepository>(context),
           ),
         ),
+    Routes.employees:
+        (context) => EmployesPage(
+          employeesViewModel: EmployeesViewModel(
+            authRepository: SimpleProvider.of<LocalAuthRepository>(context),
+          ),
+        ),
   };
 
   static Route<dynamic>? onGenerateRoutes(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>?;
 
     switch (settings.name) {
+      case Routes.editUser:
+        final userId = arguments?['userId'] as String?;
+
+        return MaterialPageRoute(
+          builder:
+              (context) => EditUserPage(
+                userId: userId,
+                editViewModel: EditViewModel(
+                  authRepository: SimpleProvider.of<LocalAuthRepository>(
+                    context,
+                  ),
+                  addressRepository: SimpleProvider.of<LocalAddressRepository>(
+                    context,
+                  ),
+                ),
+              ),
+        );
       case Routes.address:
         final callBack = arguments!['callBack'] as Function(Address);
         final adressId = arguments['addressId'] as String?;

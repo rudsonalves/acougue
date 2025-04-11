@@ -12,6 +12,7 @@ abstract class AuthRepository {
   Future<Result<User>> initialize();
   Future<Result<void>> signIn(Credentials credentials);
   Future<Result<void>> addUser(User user);
+  Future<Result<User>> getUser(String id);
   Future<Result<void>> signOut();
   Future<Result<void>> changePassword(String password);
   Future<Result<void>> updateUser(User user);

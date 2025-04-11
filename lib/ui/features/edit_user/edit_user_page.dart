@@ -16,8 +16,9 @@ import '/ui/features/edit_user/edit_view_model.dart';
 
 class EditUserPage extends StatefulWidget {
   final EditViewModel editViewModel;
+  final String? userId;
 
-  const EditUserPage({super.key, required this.editViewModel});
+  const EditUserPage({super.key, required this.editViewModel, this.userId});
 
   @override
   State<EditUserPage> createState() => _EditUserPageState();
@@ -38,21 +39,31 @@ class _EditUserPageState extends State<EditUserPage> {
   final _documentController = TextEditingController();
   Positions _selectedPosition = Positions.employee;
   String? _addressId;
+  String? _userId;
+  bool isUpdate = false;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _editViewModel = widget.editViewModel;
+    _editViewModel.add.addListener(_onSave);
     _editViewModel.update.addListener(_onUpdate);
-    _initializeForm();
-    _addressId = _editViewModel.currentUser?.addressId;
+    _userId = widget.userId;
+
+    if (_userId != null) {
+      isUpdate = true;
+      _initializeForm();
+    }
 
     super.initState();
   }
 
   @override
   void dispose() {
+    _editViewModel.add.removeListener(_onSave);
+    _editViewModel.update.removeListener(_onUpdate);
+
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
     _addressFocusNode.dispose();
@@ -64,8 +75,6 @@ class _EditUserPageState extends State<EditUserPage> {
     _contactController.dispose();
     _documentController.dispose();
 
-    _editViewModel.update.removeListener(_onUpdate);
-
     super.dispose();
   }
 
@@ -76,7 +85,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Atualize os dados de sua Conta'),
+        title: Text(isUpdate ? 'Editar Usuário' : 'Novo Usuário'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -249,10 +258,11 @@ class _EditUserPageState extends State<EditUserPage> {
                 builder: (context, _) {
                   return BigButton(
                     color: colorScheme.primary,
-                    label: 'Atualizar',
-                    iconData: Icons.update_rounded,
+                    label: isUpdate ? 'Atualizar' : 'Cadastrar',
+                    iconData:
+                        isUpdate ? Icons.update_rounded : Icons.add_rounded,
                     isRunning: _editViewModel.update.running,
-                    onPressed: _updateButton,
+                    onPressed: _saveButton,
                   );
                 },
               ),
@@ -263,7 +273,7 @@ class _EditUserPageState extends State<EditUserPage> {
     );
   }
 
-  Future<void> _updateButton() async {
+  Future<void> _saveButton() async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
@@ -282,7 +292,33 @@ class _EditUserPageState extends State<EditUserPage> {
       updatedAt: DateTime.now(),
     );
 
-    _editViewModel.update.execute(user);
+    if (isUpdate) {
+      _editViewModel.update.execute(user);
+    } else {
+      _editViewModel.add.execute(user);
+    }
+  }
+
+  Future<void> _onSave() async {
+    if (_editViewModel.add.running) return;
+
+    final result = _editViewModel.add.result!;
+
+    result.fold(
+      onSuccess: (_) {
+        Navigator.pop(context);
+      },
+      onFailure: (err) {
+        final erroMessage = 'Desculpe. Ocorreu um erro inesperado.\n$err';
+        AppSnackBar.showBottom(
+          context,
+          title: 'Erro!',
+          iconTitle: Icons.error_rounded,
+          message: erroMessage,
+          duration: const Duration(seconds: 5),
+        );
+      },
+    );
   }
 
   Future<void> _onUpdate() async {
@@ -308,9 +344,27 @@ class _EditUserPageState extends State<EditUserPage> {
   }
 
   Future<void> _initializeForm() async {
-    final user = _editViewModel.currentUser;
+    final currentUser = _editViewModel.currentUser;
 
-    if (user == null) return;
+    // Non logged user cannot be updated
+    if (currentUser == null) return;
+
+    User? user;
+
+    // Logged user can update his own user
+    if (_userId == currentUser.id) {
+      user = currentUser;
+    }
+
+    if (user == null) {
+      await _editViewModel.getUser.execute(_userId!);
+
+      final result = _editViewModel.getUser.result!;
+
+      user = result.value as User;
+    }
+
+    _addressId = user.addressId;
 
     _nameController.text = user.name;
     _selectedPosition = user.position;

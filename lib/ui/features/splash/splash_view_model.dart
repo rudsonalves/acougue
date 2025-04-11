@@ -13,6 +13,8 @@ class SplashViewModel {
 
   late Command0 load;
 
+  String? get userId => authRepository.user?.id;
+
   Future<Result<void>> _load() async {
     final result = await authRepository.initialize();
     await Future.delayed(const Duration(seconds: 1));
