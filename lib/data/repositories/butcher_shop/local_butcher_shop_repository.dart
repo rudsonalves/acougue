@@ -18,16 +18,16 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   ButcherShop? get butcher => _butcher;
 
-  static const butcherCollection = Collections.butcher;
+  static final butcherCollection = Collections.butcher.name;
 
   @override
   Future<Result<ButcherShop>> add(ButcherShop butcher) async {
     try {
       // Clean the collection. This collection is only used to store the
       // one butcher shop
-      await _jsonServer.deleteCollection(butcherCollection.name);
+      await _jsonServer.deleteCollection(butcherCollection);
       await _jsonServer.insertIntoCollection(
-        butcherCollection.name,
+        butcherCollection,
         butcher.toMap(),
       );
       _butcher = butcher;
@@ -54,10 +54,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   Future<Result<void>> delete() async {
     try {
-      await _jsonServer.removeFromCollection(
-        butcherCollection.name,
-        _butcher!.id!,
-      );
+      await _jsonServer.removeFromCollection(butcherCollection, _butcher!.id!);
 
       _butcher = null;
       return const Result.success(null);
@@ -70,10 +67,7 @@ class LocalButcherShopRepository implements ButcherShopRepository {
   @override
   Future<Result<void>> update(ButcherShop butcher) async {
     try {
-      await _jsonServer.updateInCollection(
-        butcherCollection.name,
-        butcher.toMap(),
-      );
+      await _jsonServer.updateInCollection(butcherCollection, butcher.toMap());
       _butcher = butcher;
       return const Result.success(null);
     } on Exception catch (err) {

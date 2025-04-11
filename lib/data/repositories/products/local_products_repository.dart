@@ -1,47 +1,47 @@
-import '/utils/logger.dart';
 import '/data/repositories/common/collections.dart';
-import '/data/repositories/freezers/freezers_repository.dart';
+import '/data/repositories/products/products_repository.dart';
 import '/data/services/json_service.dart';
-import '/domain/models/freezer.dart';
+import '/domain/models/product.dart';
+import '/utils/logger.dart';
 import '/utils/result.dart';
 
-class LocalFreezersRepository implements FreezersRepository {
+class LocalProductsRepository implements ProductsRepository {
   final JsonService _jsonServer;
 
-  LocalFreezersRepository(this._jsonServer) {
+  LocalProductsRepository(this._jsonServer) {
     _initialize();
   }
 
-  final Map<String, Freezer> _freezers = {};
+  final Map<String, Product> _products = {};
 
-  static final freezerCollection = Collections.freezers.name;
+  static final freezerCollection = Collections.products.name;
 
-  final logger = Logger('LocalFreezersRepository');
-
-  @override
-  Freezer? getFreezer(String id) => _freezers[id];
+  final logger = Logger('LocalProductsRepository');
 
   @override
-  Map<String, Freezer> get freezers => _freezers;
+  Product? getProduct(String id) => _products[id];
 
   @override
-  List<Freezer> get freezersList => _freezers.values.toList();
+  Map<String, Product> get products => _products;
+
+  @override
+  List<Product> get productsList => _products.values.toList();
 
   Future<void> _initialize() async {
     await getAll();
   }
 
   @override
-  Future<Result<Freezer>> add(Freezer freezer) async {
+  Future<Result<Product>> add(Product freezer) async {
     try {
       final uid = await _jsonServer.insertIntoCollection(
         freezerCollection,
         freezer.toMap(),
       );
 
-      final newFreezer = freezer.copyWith(id: uid);
-      _freezers[uid] = newFreezer;
-      return Result.success(newFreezer);
+      final newProduct = freezer.copyWith(id: uid);
+      _products[uid] = newProduct;
+      return Result.success(newProduct);
     } on Exception catch (err) {
       logger.critical('add', err);
       return Result.failure(err);
@@ -49,15 +49,15 @@ class LocalFreezersRepository implements FreezersRepository {
   }
 
   @override
-  Future<Result<Freezer>> get(String id) async {
+  Future<Result<Product>> get(String id) async {
     try {
       final map = await _jsonServer.getFromCollection(freezerCollection, id);
 
       if (map == null) {
-        return Result.failure(Exception('Freezer not found'));
+        return Result.failure(Exception('Product not found'));
       }
 
-      final freezer = Freezer.fromMap(map);
+      final freezer = Product.fromMap(map);
       return Result.success(freezer);
     } on Exception catch (err) {
       logger.critical('get', err);
@@ -70,13 +70,13 @@ class LocalFreezersRepository implements FreezersRepository {
     try {
       final listMap = await _jsonServer.getAllFromCollection(freezerCollection);
 
-      _freezers.clear();
+      _products.clear();
       if (listMap.isEmpty) {
         return const Result.success(null);
       }
 
-      _freezers.addEntries(
-        listMap.map((map) => MapEntry(map['id'], Freezer.fromMap(map))),
+      _products.addEntries(
+        listMap.map((map) => MapEntry(map['id'], Product.fromMap(map))),
       );
 
       return const Result.success(null);
@@ -99,7 +99,7 @@ class LocalFreezersRepository implements FreezersRepository {
   }
 
   @override
-  Future<Result<Freezer>> update(Freezer freezer) async {
+  Future<Result<Product>> update(Product freezer) async {
     try {
       await _jsonServer.updateInCollection(freezerCollection, freezer.toMap());
 

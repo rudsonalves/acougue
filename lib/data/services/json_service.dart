@@ -503,7 +503,7 @@ class JsonService {
       if (!isOpen) await open();
 
       if (!_data.containsKey(collection)) {
-        throw Exception('Collection ${collection} does not exist');
+        throw Exception('Collection $collection does not exist');
       }
 
       final id = map['id'];
@@ -559,18 +559,18 @@ class JsonService {
   /// Throws an exception if the collection does not exist.
   ///
   /// The database must be opened before calling this function.
-  Future<List<dynamic>> getAllFromCollection(Collections collection) async {
+  Future<List<dynamic>> getAllFromCollection(String collection) async {
     try {
       if (!isOpen) await open();
 
-      if (!_data.containsKey(collection.name)) {
+      if (!_data.containsKey(collection)) {
         return [];
       }
 
-      final registers = _data[collection.name];
+      final registers = _data[collection];
       return registers.values.toList();
     } catch (err) {
-      logger.critical('getAllFromCollection(${collection.name})', err);
+      logger.critical('getAllFromCollection($collection)', err);
       throw Exception(err);
     }
   }

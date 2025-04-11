@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart';
-import 'package:acougue/utils/extensions.dart';
-import 'package:acougue/routing/router.dart';
-import 'package:acougue/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
+import '/utils/extensions.dart';
+import '/routing/router.dart';
+import '/ui/features/home/registrations/view_model/butcher_shop_view_model.dart';
 
 class RegistrationsPage extends StatefulWidget {
   final ButcherShopViewModel butcherShopViewModel;

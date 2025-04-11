@@ -140,6 +140,64 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/11 - version: 0.20.00+13
+
+### Refactor to Use String Collections and Add Product Repository
+
+This update completes the transition to using `String`-based identifiers for collections across all local repositories. It also introduces support for product data, including models, enums, repository interface and implementation. This foundation enables the application to manage meat cuts with detailed product metadata.
+
+### Modified Files
+
+- **lib/data/repositories/addresses/local_address_repository.dart**
+  - Changed `addressCollection` to use `.name` string instead of enum.
+  - Refactored all `JsonService` calls to use `String` identifiers.
+
+- **lib/data/repositories/butcher_shop/local_butcher_shop_repository.dart**
+  - Replaced enum-based `collection` usage with `.name`.
+  - Standardized JSON interaction using string keys for consistency.
+
+- **lib/data/repositories/common/collections.dart**
+  - Added `products` to the `Collections` enum.
+
+- **lib/data/repositories/freezers/local_freezers_repository.dart**
+  - Updated `freezerCollection` to use string from enum name.
+  - Applied consistent use of `String` collections in all service methods.
+
+- **lib/data/services/json_service.dart**
+  - Refactored `getAllFromCollection` to accept a `String` instead of enum.
+  - Updated internal references from `collection.name` to `collection`.
+
+- **lib/ui/features/home/registrations/registrations_page.dart**
+  - Minor formatting and import path adjustments for clarity and consistency.
+
+- **test/data/services/json_service_test.dart**
+  - Updated `getAllFromCollection` test to use a string identifier.
+
+### New Files
+
+- **lib/data/repositories/products/local_products_repository.dart**
+  - Implements the local product repository with methods to add, retrieve, update, and delete products.
+  - Uses the `JsonService` for data persistence and retrieval.
+  - Loads all product data on initialization.
+
+- **lib/data/repositories/products/products_repository.dart**
+  - Defines the `ProductsRepository` abstract class.
+  - Declares methods for handling `Product` data and state.
+
+- **lib/domain/enums/enums.dart**
+  - Added enums for primal and retail meat cuts (e.g., `PrimalCuts`, `RetailCuts`, `Dianteiro`, etc.).
+  - Each enum implements the `LabeledEnum` interface with readable labels.
+
+- **lib/domain/models/product.dart**
+  - Created the `Product` model class with fields for meat cut classification, weight, input and expiration dates.
+  - Includes serialization (`toMap`) and deserialization (`fromMap`) logic.
+  - Supports `copyWith` and `toString`.
+
+### Conclusion
+
+The system is now equipped to manage meat products and uses a consistent, simplified approach for collection identifiers throughout. This lays the groundwork for upcoming product-related features.
+
+
 ## 2025/04/11 - version: 0.10.05+12
 
 ### Refactor JsonService to Use String-Based Collection Identifiers

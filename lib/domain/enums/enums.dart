@@ -81,3 +81,75 @@ enum FreezerType implements LabeledEnum {
 
   const FreezerType(this.label);
 }
+
+enum PrimalCuts implements LabeledEnum {
+  halfCarcass('Meias Carcaças'),
+  dianteiro('Dianteiro'),
+  traseiro('Traseiro'),
+  costilhar('Costilhar');
+
+  @override
+  final String label;
+
+  const PrimalCuts(this.label);
+}
+
+enum HalfCarcass { dianteiro, traseiro, costilhar }
+
+enum Dianteiro {
+  Acem,
+  Paleta,
+  Musculo,
+  Pescoco,
+  Peito,
+  PeitoComOsso,
+  PeitoSemOsso,
+  Cupim,
+  PontaDeAgulha,
+}
+
+enum Traseiro {
+  CoxaoMole,
+  CoxaoDuro,
+  Patinho,
+  Lagarto,
+  Alcatra,
+  Maminha,
+  Picanha,
+  FileMignon,
+  Fraldinha,
+  Painho,
+}
+
+enum Costilhar { Costela, CostelaRipa, Fraldinha, PeitoBovino }
+
+enum RetailCuts implements LabeledEnum {
+  Acem('Acém'),
+  Paleta('Paleta'),
+  Musculo('Músculo'),
+  Pescoco('Pescoço'),
+  Peito('Peito'),
+  PeitoComOsso('Peito com osso'),
+  PeitoSemOsso('Peito sem osso'),
+  Cupim('Cupim'),
+  PontaDeAgulha('Ponta de agulha'),
+  CoxaoMole('Coxão mole'),
+  CoxaoDuro('Coxão duro'),
+  Patinho('Patinho'),
+  Lagarto('Lagarto'),
+  Alcatra('Alcatra'),
+  Maminha('Maminha'),
+  Picanha('Picanha'),
+  Contrafile('Contrafilé'),
+  FileMignon('Filé mignon'),
+  Fraldinha('Fraldinha'),
+  Painho('Paínho'),
+  Costela('Costela'),
+  CostelaRipa('Costela ripa'),
+  PeitoBovino('Peito bovino');
+
+  @override
+  final String label;
+
+  const RetailCuts(this.label);
+}

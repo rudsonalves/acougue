@@ -208,7 +208,9 @@ void main() {
         map,
       );
 
-      final map1 = await dbServer.getAllFromCollection(Collections.addresses);
+      final map1 = await dbServer.getAllFromCollection(
+        Collections.addresses.name,
+      );
       expect(map1.first['value'], map['value']);
 
       final map2 = await dbServer.getFromCollection(
