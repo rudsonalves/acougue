@@ -140,6 +140,73 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/11 - version: 0.20.01+14
+
+### Add product editing functionality with new models and UI integration
+
+This commit introduces the product editing feature to the application. It includes updates to the domain model, new enums, a complete product form UI, and integration with routing and dependency injection. Minor UI and performance improvements were also made throughout the codebase.
+
+### Modified Files
+
+- **lib/config/dependencies.dart**
+  - Added `LocalProductsRepository` to the list of provided dependencies.
+
+- **lib/domain/enums/enums.dart**
+  - Introduced `CutsType` enum to generalize cut classifications.
+  - Updated `PrimalCuts` enum and moved it under the new structure.
+
+- **lib/domain/models/product.dart**
+  - Replaced `name` field with structured fields: `cutType`, `primalCut`, and `retailCuts`.
+  - Added new fields: `comments`, `freezerId`, `employeeId`.
+  - Updated `toMap`, `fromMap`, and `toString` methods accordingly.
+
+- **lib/routing/router.dart**
+  - Registered new route `editProduct`.
+  - Implemented route logic to instantiate `EditProductPage` with appropriate `ProductViewModel`.
+
+- **lib/ui/core/themes/dimens.dart**
+  - Adjusted spacing and padding values for mobile and desktop layouts to improve visual alignment.
+
+- **lib/ui/features/address/address_page.dart**
+  - Renamed `_initializeAddress` to `_initialize` for consistency.
+  - Fixed typo in the page title from "CriarEndereço" to "Criar Endereço".
+
+- **lib/ui/features/address/address_view_model.dart**
+  - Reduced artificial delay from 2 seconds to 1 second in `_save` and `_update`.
+  - Improved error message clarity in `_getAddress`.
+
+- **lib/ui/features/edit_user/edit_view_model.dart**
+  - Reduced artificial delay in `_update` from 2 seconds to 1 second.
+
+- **lib/ui/features/home/home_page.dart**
+  - Refactored layout using `OverflowBar` instead of `SingleChildScrollView` for better button grouping.
+  - Connected "Adicionar Produto" button to the new edit product route.
+
+- **lib/ui/features/home/registrations/freezers/view_models/edit_freezer_view_model.dart**
+  - Reduced artificial delay in save and update methods.
+
+- **lib/ui/features/home/registrations/view_model/butcher_shop_view_model.dart**
+  - Reduced artificial delay in `_update` method.
+
+- **lib/ui/features/sign_in/sign_in_view_model.dart**
+  - Reduced post-sign-in delay from 2 seconds to 1 second.
+
+- **lib/ui/features/splash/splash_view_model.dart**
+  - Reduced splash delay after initialization from 2 seconds to 1 second.
+
+### New Files
+
+- **lib/ui/features/home/edit_product/edit_product_page.dart**
+  - Full implementation of a dynamic form for creating and editing products, supporting multiple cut types, freezer selection, and employee identification.
+
+- **lib/ui/features/home/edit_product/product_view_model.dart**
+  - ViewModel to manage product creation, edition, and retrieval logic. Interfaces with repositories and maintains the current user and freezer state.
+
+### Conclusão
+
+All new features were successfully implemented and integrated, enhancing the product management capabilities of the application.
+
+
 ## 2025/04/11 - version: 0.20.00+13
 
 ### Refactor to Use String Collections and Add Product Repository

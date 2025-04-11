@@ -24,7 +24,7 @@ class AddressViewModel {
   Future<Result<Address>> _save(Address address) async {
     final result = await _addressRepository.add(address);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (newAddress) {
@@ -43,7 +43,7 @@ class AddressViewModel {
   Future<Result<void>> _update(Address address) async {
     final result = await _addressRepository.update(address);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (_) {
@@ -59,7 +59,7 @@ class AddressViewModel {
   }
 
   Future<Result<Address>> _getAddress(String? id) async {
-    if (id == null) return Result.failure(Exception('Address is null'));
+    if (id == null) return Result.failure(Exception('Address id is null'));
 
     final result = await _addressRepository.get(id);
 

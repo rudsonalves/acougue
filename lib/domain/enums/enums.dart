@@ -82,8 +82,18 @@ enum FreezerType implements LabeledEnum {
   const FreezerType(this.label);
 }
 
-enum PrimalCuts implements LabeledEnum {
+enum CutsType implements LabeledEnum {
   halfCarcass('Meias Carcaças'),
+  primalCuts('Cortes Primários'),
+  retailCuts('Cortes Comerciais');
+
+  @override
+  final String label;
+
+  const CutsType(this.label);
+}
+
+enum PrimalCuts implements LabeledEnum {
   dianteiro('Dianteiro'),
   traseiro('Traseiro'),
   costilhar('Costilhar');

@@ -55,7 +55,7 @@ class _AddressPageState extends State<AddressPage> {
 
     if (_addressId != null && _addressId!.trim().isNotEmpty) {
       _isUpdate = true;
-      _initializeAddress();
+      _initialize();
     }
 
     super.initState();
@@ -83,7 +83,7 @@ class _AddressPageState extends State<AddressPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isUpdate ? 'Editar Endereço' : 'CriarEndereço'),
+        title: Text(_isUpdate ? 'Editar Endereço' : 'Criar Endereço'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -336,7 +336,7 @@ class _AddressPageState extends State<AddressPage> {
     );
   }
 
-  Future<void> _initializeAddress() async {
+  Future<void> _initialize() async {
     await _addressViewModel.getAddress.execute(_addressId!);
     final result = _addressViewModel.getAddress.result!;
 

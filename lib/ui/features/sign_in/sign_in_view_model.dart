@@ -19,7 +19,7 @@ class SignInViewModel extends ChangeNotifier {
   Future<Result<void>> _signIn(Credentials credentials) async {
     try {
       final result = await _authRepository.signIn(credentials);
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       result.fold(
         onSuccess: (value) {

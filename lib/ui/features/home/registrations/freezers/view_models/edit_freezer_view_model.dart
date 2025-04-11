@@ -24,7 +24,7 @@ class FreezersViewModel {
   Future<Result<Freezer>> _save(Freezer address) async {
     final result = await _freezersRepository.add(address);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (newFreezer) {
@@ -41,7 +41,7 @@ class FreezersViewModel {
   Future<Result<void>> _update(Freezer address) async {
     final result = await _freezersRepository.update(address);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (_) {

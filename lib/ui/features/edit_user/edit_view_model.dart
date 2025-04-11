@@ -29,7 +29,7 @@ class EditViewModel {
 
   Future<Result<User>> _update(User user) async {
     final result = await _authRepository.updateUser(user);
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     result.fold(
       onSuccess: (user) {
