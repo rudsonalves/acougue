@@ -57,8 +57,8 @@ class LocalProductsRepository implements ProductsRepository {
         return Result.failure(Exception('Product not found'));
       }
 
-      final freezer = Product.fromMap(map);
-      return Result.success(freezer);
+      final product = Product.fromMap(map);
+      return Result.success(product);
     } on Exception catch (err) {
       logger.critical('get', err);
       return Result.failure(err);
@@ -91,6 +91,7 @@ class LocalProductsRepository implements ProductsRepository {
     try {
       await _jsonServer.removeFromCollection(freezerCollection, id);
 
+      _products.remove(id);
       return const Result.success(null);
     } on Exception catch (err) {
       logger.critical('get', err);
@@ -99,14 +100,28 @@ class LocalProductsRepository implements ProductsRepository {
   }
 
   @override
-  Future<Result<Product>> update(Product freezer) async {
+  Future<Result<Product>> update(Product product) async {
     try {
-      await _jsonServer.updateInCollection(freezerCollection, freezer.toMap());
+      await _jsonServer.updateInCollection(freezerCollection, product.toMap());
 
-      return Result.success(freezer);
+      _products[product.id!] = product;
+      return Result.success(product);
     } on Exception catch (err) {
       logger.critical('add', err);
       return Result.failure(err);
     }
+  }
+
+  @override
+  List<Product> sortByExpirationDate([bool asc = true]) {
+    final products = productsList;
+
+    if (asc) {
+      products.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+    } else {
+      products.sort((a, b) => b.expirationDate.compareTo(a.expirationDate));
+    }
+
+    return products;
   }
 }

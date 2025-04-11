@@ -140,6 +140,65 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/11 - version: 0.20.02+15
+
+### Enhance product lifecycle tracking and UI integration
+
+This commit introduces the ability to retrieve user and freezer metadata, improves the `Product` repository logic, and significantly extends the UI and view models to support lifecycle tracking, including product expiration management. It adds expiration-based sorting, proper date handling, and richer display for administrative users.
+
+### Modified Files
+
+- **lib/data/repositories/auth/auth_repository.dart**
+  - Added `listUserInfo` getter and `getUserInfo(String)` method to provide access to user metadata.
+
+- **lib/data/repositories/auth/local_auth_repository.dart**
+  - Implemented `listUserInfo` and `getUserInfo` using a local map.
+  - Fetched and cached user info from the backend during initialization using `_mountUserInfo`.
+
+- **lib/data/repositories/products/local_products_repository.dart**
+  - Fixed a variable name bug when retrieving a product.
+  - Ensured local cache is updated when deleting or updating a product.
+  - Implemented `sortByExpirationDate`, which returns the product list sorted by expiration date (ascending or descending).
+
+- **lib/data/repositories/products/products_repository.dart**
+  - Declared `sortByExpirationDate` method in the abstract repository interface.
+
+- **lib/routing/router.dart**
+  - Updated `Routes.home` to instantiate `HomeViewModel` with required repositories.
+
+- **lib/ui/features/home/edit_product/edit_product_page.dart**
+  - Fixed incorrect method binding for expiration date picker.
+  - Improved date picker initialization using state values.
+  - Ensured date text fields are updated after loading a product.
+  - Triggered a UI rebuild after product loading using `setState`.
+
+- **lib/ui/features/home/edit_product/product_view_model.dart**
+  - Reformatted imports for consistency.
+
+- **lib/ui/features/home/home_page.dart**
+  - Integrated `HomeViewModel` into the UI.
+  - Displayed a list of products with status color coding based on expiration proximity.
+  - Added user and freezer metadata to the UI.
+  - Implemented reverse sorting by expiration date.
+  - Navigated to the product editing screen on item tap.
+
+- **lib/ui/features/home/home_view_model.dart**
+  - Initialized repositories and provided accessors for products, freezers, and user info.
+  - Implemented expiration date-based sorting with delegation to the repository.
+
+### New Files
+
+- **lib/domain/dto/user_info.dart**
+  - Created `UserInfo` DTO to hold minimal user metadata for display purposes.
+
+- **lib/ui/features/home/widgets/home_header_row.dart**
+  - Added a reusable UI widget to render product list headers with interactive sorting on the "Validade" column.
+
+### Conclusão
+
+These changes significantly enhance product lifecycle visibility and management within the app, while introducing clean, modular components for UI rendering and data access.
+
+
 ## 2025/04/11 - version: 0.20.01+14
 
 ### Add product editing functionality with new models and UI integration

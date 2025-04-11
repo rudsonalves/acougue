@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:acougue/domain/dto/credentials.dart';
+import 'package:acougue/domain/dto/user_info.dart';
 
+import '/domain/dto/credentials.dart';
 import '/data/repositories/auth/auth_repository.dart';
 import '../../services/json_service.dart';
 import '/domain/models/user.dart';
@@ -13,6 +14,14 @@ class LocalAuthRepository implements AuthRepository {
   LocalAuthRepository(this._jsonServer);
 
   User? _user;
+
+  final Map<String, UserInfo> _usersInfo = {};
+
+  @override
+  List<UserInfo> get listUserInfo => _usersInfo.values.toList();
+
+  @override
+  UserInfo? getUserInfo(String id) => _usersInfo[id];
 
   @override
   User? get user => _user;
@@ -38,7 +47,22 @@ class LocalAuthRepository implements AuthRepository {
       _user = null;
       log(err.toString());
       return Result.failure(err);
+    } finally {
+      await _mountUserInfo();
     }
+  }
+
+  Future<void> _mountUserInfo() async {
+    final usersMap = await _jsonServer.getAllFromCollection('users');
+
+    _usersInfo.clear();
+
+    _usersInfo.addEntries(
+      usersMap.map(
+        (map) =>
+            MapEntry(map['id'] as String, UserInfo.fromUser(User.fromMap(map))),
+      ),
+    );
   }
 
   @override

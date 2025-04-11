@@ -11,4 +11,6 @@ abstract class ProductsRepository {
   Future<Result<void>> getAll();
   Future<Result<Product>> update(Product freezer);
   Future<Result<void>> delete(String id);
+
+  List<Product> sortByExpirationDate([bool asc = true]);
 }

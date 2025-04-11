@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:acougue/domain/models/product.dart';
-import 'package:acougue/ui/core/ui/messages/app_snack_bar.dart';
+import '/domain/models/product.dart';
+import '/ui/core/ui/messages/app_snack_bar.dart';
 import '/domain/models/freezer.dart';
 import '/ui/core/ui/buttons/big_button.dart';
 import '/ui/core/ui/customs_edit_controllers/numeric_edit_controller.dart';
@@ -224,7 +224,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   Expanded(
                     child: InkWell(
                       borderRadius: dimens.borderRadius,
-                      onTap: _getInputDate,
+                      onTap: _getExpirationDate,
                       child: AbsorbPointer(
                         child: BasicTextField(
                           labelText: 'Data de Validade',
@@ -379,7 +379,7 @@ class _EditProductPageState extends State<EditProductPage> {
   Future<void> _getInputDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _inputDate,
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
@@ -387,6 +387,20 @@ class _EditProductPageState extends State<EditProductPage> {
     if (pickedDate != null) {
       _inputDate = pickedDate;
       _inputDateController.text = _inputDate.toBrString();
+    }
+  }
+
+  Future<void> _getExpirationDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _expirationDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      _expirationDate = pickedDate;
+      _expirationDateController.text = _expirationDate.toBrString();
     }
   }
 
@@ -411,6 +425,10 @@ class _EditProductPageState extends State<EditProductPage> {
     _employeeId = product.employeeId;
     _weightController.numericValue = product.weight;
     _inputDate = product.inputDate;
+    _inputDateController.text = product.inputDate.toBrString();
     _expirationDate = product.expirationDate;
+    _expirationDateController.text = product.expirationDate.toBrString();
+
+    setState(() {});
   }
 }
