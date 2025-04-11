@@ -1,6 +1,5 @@
-import 'package:acougue/data/repositories/auth/auth_repository.dart';
-import 'package:acougue/domain/models/user.dart';
-
+import '/data/repositories/auth/auth_repository.dart';
+import '/domain/models/user.dart';
 import '/data/repositories/freezers/freezers_repository.dart';
 import '/data/repositories/products/products_repository.dart';
 import '/domain/models/freezer.dart';

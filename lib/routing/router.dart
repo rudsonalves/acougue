@@ -44,7 +44,18 @@ final class Routes {
   static const String editProduct = '/edit-products';
 
   static Map<String, Widget Function(BuildContext)> routes = {
-    Routes.home: (context) => HomePage(homeViewModel: HomeViewModel()),
+    Routes.home:
+        (context) => HomePage(
+          homeViewModel: HomeViewModel(
+            freezersRepository: SimpleProvider.of<LocalFreezersRepository>(
+              context,
+            ),
+            productsRepository: SimpleProvider.of<LocalProductsRepository>(
+              context,
+            ),
+            authRepository: SimpleProvider.of<LocalAuthRepository>(context),
+          ),
+        ),
     Routes.signin:
         (context) => SignInPage(
           signInViewModel: SignInViewModel(
