@@ -229,7 +229,7 @@ class JsonService {
       return uid;
     } catch (err) {
       logger.critical('signUp', err);
-      return null;
+      rethrow;
     }
   }
 

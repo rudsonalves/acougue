@@ -281,14 +281,15 @@ class _EditUserPageState extends State<EditUserPage> {
     final currentUser = _editViewModel.currentUser!;
 
     User user = User(
-      id: currentUser.id,
+      id: _userId,
       name: _nameController.text,
       addressId: _addressId,
       document: _documentController.text,
       contact: _contactController.text,
       position: _selectedPosition,
       password: _passwordController.text,
-      createdAt: currentUser.createdAt,
+      createdAt:
+          _userId != currentUser.id ? DateTime.now() : currentUser.createdAt,
       updatedAt: DateTime.now(),
     );
 

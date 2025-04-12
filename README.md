@@ -140,6 +140,33 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/12 - version: 0.50.01+17
+
+### Enable full user creation and editing with consistent ID handling
+
+This commit finalizes user creation and editing flows by ensuring consistent handling of user IDs, especially when admins or managers create new users. It also adds tap-to-edit functionality in the employee list and improves the UI label for the sign-in form to better reflect expected input.
+
+### Modified Files
+
+- **lib/data/services/json_service.dart**
+  - Changed `signUp` method to rethrow exceptions instead of returning `null`, allowing error handling to be centralized and standardized.
+
+- **lib/ui/features/edit_user/edit_user_page.dart**
+  - Ensured `createdAt` is properly set when a new user is created by someone else.
+  - Adjusted ID assignment logic to correctly distinguish between current user updates and new user creation.
+
+- **lib/ui/features/home/employees/employes_page.dart**
+  - Added `onTap` support for each user in the list to open the edit form.
+  - Linked each user to the edit screen via route arguments.
+
+- **lib/ui/features/sign_in/sign_in.dart**
+  - Renamed the "Nome" label to "Nome de Usuário" and updated the hint and icon to clarify the input expectations.
+
+### Conclusão
+
+With these updates, the system now fully supports the creation and editing of users by privileged roles, ensuring accurate user metadata and providing a smoother admin workflow.
+
+
 ## 2025/04/11 - version: 0.50.00+16
 
 ### Implement user management interface and employee listing
