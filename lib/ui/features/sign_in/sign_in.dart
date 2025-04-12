@@ -64,11 +64,11 @@ class _SignInPageState extends State<SignInPage> {
                   child: Column(
                     children: [
                       BasicTextField(
-                        labelText: 'Nome',
+                        labelText: 'Nome de Usuário',
                         hintText: 'Digite seu nome.',
                         controller: _emailController,
                         prefixIcon: Icon(
-                          Icons.email_rounded,
+                          Icons.person_rounded,
                           color: colorScheme.primary,
                         ),
                       ),

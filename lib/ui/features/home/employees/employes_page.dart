@@ -52,6 +52,7 @@ class _EmployesPageState extends State<EmployesPage> {
               itemCount: usersInfo.length,
               itemBuilder:
                   (context, index) => ListTile(
+                    onTap: () => _editUser(usersInfo[index].id),
                     title: Text(usersInfo[index].name),
                     subtitle: Text(usersInfo[index].contact),
                   ),
@@ -64,6 +65,15 @@ class _EmployesPageState extends State<EmployesPage> {
 
   Future<void> _addUser() async {
     await Navigator.pushNamed(context, Routes.editUser);
+    setState(() {});
+  }
+
+  Future<void> _editUser(String userId) async {
+    await Navigator.pushNamed(
+      context,
+      Routes.editUser,
+      arguments: {'userId': userId},
+    );
     setState(() {});
   }
 }
