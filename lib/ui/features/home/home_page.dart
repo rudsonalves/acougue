@@ -1,3 +1,5 @@
+import 'package:acougue/ui/core/ui/images/logo_image.dart';
+import 'package:acougue/ui/features/home/widgets/center_text.dart';
 import 'package:flutter/material.dart';
 
 import '/domain/models/product.dart';
@@ -61,6 +63,48 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              // decoration: BoxDecoration(color: Colors.blue),
+              child: Column(
+                children: [LogoImage(radius: 50), Text('Sabor da Morte')],
+              ),
+            ),
+            ListTile(
+              title: const Text('Registros'),
+              leading: const Icon(Icons.list),
+              onTap: () {
+                _goToRegistrationsPage();
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Adicionar Produto'),
+              leading: const Icon(Icons.add),
+              onTap: () {
+                _goToProductsInput();
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Empregados'),
+              leading: const Icon(Icons.people),
+              onTap: () {
+                _goToEmployees();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToProductsInput,
+        icon: const Icon(Icons.add),
+        label: const Text('Adicionar Produto'),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: dimens.paddingScreenHorizontal / 2,
@@ -73,17 +117,15 @@ class _HomePageState extends State<HomePage> {
             OverflowBar(
               alignment: MainAxisAlignment.spaceAround,
               children: [
-                FilledButton(
+                ElevatedButton.icon(
                   onPressed: _goToRegistrationsPage,
-                  child: const Text('Registros'),
+                  icon: const Icon(Icons.list),
+                  label: const Text('Registros'),
                 ),
-                FilledButton(
-                  onPressed: _goToProductsInput,
-                  child: const Text('Adicionar Produto'),
-                ),
-                FilledButton(
+                ElevatedButton.icon(
                   onPressed: _goToEmployees,
-                  child: const Text('Empregados'),
+                  icon: const Icon(Icons.people),
+                  label: const Text('Empregados'),
                 ),
               ],
             ),
@@ -130,37 +172,29 @@ class _HomePageState extends State<HomePage> {
                           subtitle: Text(product.comments ?? ''),
                         ),
                       ),
-                      Expanded(
-                        child: CenterText(
-                          color: color,
-                          text: product.inputDate.toBrString(),
-                        ),
+                      CenterText(
+                        color: color,
+                        text: product.inputDate.toBrString(),
                       ),
-                      Expanded(
-                        child: CenterText(
-                          color: color,
-                          text: product.expirationDate.toBrString(),
-                        ),
+                      CenterText(
+                        color: color,
+                        text: product.expirationDate.toBrString(),
                       ),
-                      Expanded(
-                        child: CenterText(
-                          color: color,
-                          text:
-                              _homeViewModel
-                                  .getUserInfo(product.employeeId)
-                                  ?.name ??
-                              '',
-                        ),
+                      CenterText(
+                        color: color,
+                        text:
+                            _homeViewModel
+                                .getUserInfo(product.employeeId)
+                                ?.name ??
+                            '',
                       ),
-                      Expanded(
-                        child: CenterText(
-                          color: color,
-                          text:
-                              _homeViewModel
-                                  .getFreezer(product.freezerId)
-                                  ?.name ??
-                              '',
-                        ),
+                      CenterText(
+                        color: color,
+                        text:
+                            _homeViewModel
+                                .getFreezer(product.freezerId)
+                                ?.name ??
+                            '',
                       ),
                     ],
                   ),
@@ -201,23 +235,5 @@ class _HomePageState extends State<HomePage> {
       arguments: {'productId': product.id},
     );
     setState(() {});
-  }
-}
-
-class CenterText extends StatelessWidget {
-  final String text;
-  final Color? color;
-
-  const CenterText({super.key, required this.text, this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        text,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: color),
-      ),
-    );
   }
 }

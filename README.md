@@ -140,6 +140,30 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/12 - version: 0.50.02+18
+
+### Add navigation drawer and FAB to enhance home page UX
+
+This update introduces a navigation drawer and a floating action button (FAB) to the home page. It streamlines access to main features like product addition, employee management, and record viewing. It also includes refactoring of layout buttons and the relocation of the `CenterText` widget into its own reusable component.
+
+### Modified Files
+
+- **lib/ui/features/home/home_page.dart**
+  - Added a `Drawer` with menu items for "Registros", "Adicionar Produto", and "Empregados".
+  - Included a `FloatingActionButton.extended` to allow quick product additions.
+  - Updated the top bar buttons from `FilledButton` to `ElevatedButton.icon` for improved accessibility and clarity.
+  - Simplified layout by using the newly extracted `CenterText` widget across product listing rows.
+
+### New Files
+
+- **lib/ui/features/home/widgets/center_text.dart**
+  - Introduced a new reusable widget `CenterText` that wraps centered text within an `Expanded` and applies consistent styling and overflow behavior.
+
+### Conclusão
+
+The interface is now more intuitive and easier to navigate, offering quicker access to key features with reusable UI components and a responsive layout.
+
+
 ## 2025/04/12 - version: 0.50.01+17
 
 ### Enable full user creation and editing with consistent ID handling
