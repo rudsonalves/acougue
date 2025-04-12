@@ -140,6 +140,34 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/12 - version: 0.50.04+20
+
+### Refactored home page UI by modularizing drawer and button header widgets
+
+This commit improves the structure and maintainability of the home page UI. It extracts the navigation drawer and the top button header into separate reusable widgets, simplifies state initialization, and centralizes the logic for title and expiration color mapping. These changes enhance readability and promote component reuse.
+
+### Modified Files
+
+- `lib/ui/features/home/home_page.dart`
+  - Removed inline drawer and header button implementations.
+  - Imported and integrated `AppDrawer` and `ButtonsHeader` components.
+  - Moved the date calculations for expiration filtering to `initState`.
+  - Added a private method `_setTitleAndColor` to encapsulate logic for determining the title and expiration color for each product.
+  - Improved code readability by simplifying how user name and location are retrieved.
+
+### New Files
+
+- `lib/ui/features/home/widgets/app_drawer.dart`
+  - New reusable widget that encapsulates the navigation drawer logic and UI, allowing modular control of navigation actions via callback functions.
+
+- `lib/ui/features/home/widgets/buttons_header.dart`
+  - New widget that centralizes the two action buttons ("Registros" and "Empregados") in a cleaner, reusable component.
+
+### Conclusion
+
+Home UI has been modularized and refactored for clarity and scalability, ensuring easier maintenance and future expansion.
+
+
 ## 2025/04/12 - version: 0.50.03+19
 
 ### Updated app title and added JSON-based database files for development

@@ -1,7 +1,8 @@
-import 'package:acougue/ui/core/ui/images/logo_image.dart';
-import 'package:acougue/ui/features/home/widgets/center_text.dart';
 import 'package:flutter/material.dart';
 
+import '/ui/features/home/widgets/app_drawer.dart';
+import '/ui/features/home/widgets/buttons_header.dart';
+import '/ui/features/home/widgets/center_text.dart';
 import '/domain/models/product.dart';
 import '/domain/enums/enums.dart';
 import '/ui/features/home/widgets/home_header_row.dart';
@@ -25,10 +26,18 @@ class _HomePageState extends State<HomePage> {
   late final HomeViewModel _homeViewModel;
 
   bool sortOrder = true;
+  late final DateTime _nextWeek;
+  late final DateTime _nextMonth;
+  late final DateTime _next3Month;
 
   @override
   void initState() {
     _homeViewModel = widget.homeViewModel;
+
+    final now = DateTime.now();
+    _nextWeek = now.add(const Duration(days: 7));
+    _nextMonth = now.add(const Duration(days: 30));
+    _next3Month = now.add(const Duration(days: 90));
 
     super.initState();
   }
@@ -36,13 +45,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final brightness = NotifierProvider.of<BrightnessController>(context);
-    // final colorScheme = Theme.of(context).colorScheme;
     final dimens = Dimens.of(context);
     final producsList = _homeViewModel.sortByExpirationDate(sortOrder);
-    final now = DateTime.now();
-    final nextWeek = now.add(const Duration(days: 7));
-    final nextMonth = now.add(const Duration(days: 30));
-    final next3Month = now.add(const Duration(days: 90));
 
     return Scaffold(
       appBar: AppBar(
@@ -63,42 +67,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              // decoration: BoxDecoration(color: Colors.blue),
-              child: Column(
-                children: [LogoImage(radius: 50), Text('Sabor da Morte')],
-              ),
-            ),
-            ListTile(
-              title: const Text('Registros'),
-              leading: const Icon(Icons.list),
-              onTap: () {
-                _goToRegistrationsPage();
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Adicionar Produto'),
-              leading: const Icon(Icons.add),
-              onTap: () {
-                _goToProductsInput();
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Empregados'),
-              leading: const Icon(Icons.people),
-              onTap: () {
-                _goToEmployees();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+      drawer: AppDrawer(
+        goToRegistrationsPage: _goToRegistrationsPage,
+        goToProductsInput: _goToProductsInput,
+        goToEmployees: _goToEmployees,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToProductsInput,
@@ -114,20 +86,9 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           spacing: dimens.spacingVertical,
           children: [
-            OverflowBar(
-              alignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: _goToRegistrationsPage,
-                  icon: const Icon(Icons.list),
-                  label: const Text('Registros'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _goToEmployees,
-                  icon: const Icon(Icons.people),
-                  label: const Text('Empregados'),
-                ),
-              ],
+            ButtonsHeader(
+              goToRegistrationsPage: _goToRegistrationsPage,
+              goToEmployees: _goToEmployees,
             ),
             HomeHeaderRow(callBack: _revertOrder),
             ListView.builder(
@@ -135,27 +96,11 @@ class _HomePageState extends State<HomePage> {
               itemCount: producsList.length,
               itemBuilder: (context, index) {
                 final product = producsList[index];
-                String title = '';
-                switch (product.cutType) {
-                  case CutsType.halfCarcass:
-                    title = CutsType.halfCarcass.label;
-                    break;
-                  case CutsType.primalCuts:
-                    title = product.primalCut!.label;
-                    break;
-                  case CutsType.retailCuts:
-                    title = product.retailCuts!.label;
-                }
-
-                Color? color;
-
-                if (product.expirationDate.isBefore(nextWeek)) {
-                  color = Colors.redAccent;
-                } else if (product.expirationDate.isBefore(nextMonth)) {
-                  color = Colors.orange;
-                } else if (product.expirationDate.isBefore(next3Month)) {
-                  color = Colors.yellow;
-                }
+                final (String title, Color? color) = _setTitleAndColor(product);
+                final userName =
+                    _homeViewModel.getUserInfo(product.employeeId)?.name ?? '';
+                final location =
+                    _homeViewModel.getFreezer(product.freezerId)?.name ?? '';
 
                 return InkWell(
                   onTap: () => _goToEdit(product),
@@ -180,22 +125,8 @@ class _HomePageState extends State<HomePage> {
                         color: color,
                         text: product.expirationDate.toBrString(),
                       ),
-                      CenterText(
-                        color: color,
-                        text:
-                            _homeViewModel
-                                .getUserInfo(product.employeeId)
-                                ?.name ??
-                            '',
-                      ),
-                      CenterText(
-                        color: color,
-                        text:
-                            _homeViewModel
-                                .getFreezer(product.freezerId)
-                                ?.name ??
-                            '',
-                      ),
+                      CenterText(color: color, text: userName),
+                      CenterText(color: color, text: location),
                     ],
                   ),
                 );
@@ -205,6 +136,32 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  (String, Color?) _setTitleAndColor(Product product) {
+    String title = '';
+    switch (product.cutType) {
+      case CutsType.halfCarcass:
+        title = CutsType.halfCarcass.label;
+        break;
+      case CutsType.primalCuts:
+        title = product.primalCut!.label;
+        break;
+      case CutsType.retailCuts:
+        title = product.retailCuts!.label;
+    }
+
+    Color? color;
+
+    if (product.expirationDate.isBefore(_nextWeek)) {
+      color = Colors.redAccent;
+    } else if (product.expirationDate.isBefore(_nextMonth)) {
+      color = Colors.orange;
+    } else if (product.expirationDate.isBefore(_next3Month)) {
+      color = Colors.yellow;
+    }
+
+    return (title, color);
   }
 
   void _revertOrder() {
