@@ -1,0 +1,169 @@
+{
+    "users": {
+        "d6e80f970912399b0b9d3d63eb8156f9": {
+            "id": "d6e80f970912399b0b9d3d63eb8156f9",
+            "name": "admin",
+            "password": "123qwe",
+            "addressId": "4867d567aa72536b8eed950082add7e9",
+            "document": "RG 123.123-9",
+            "contact": "(12) 94535-3423",
+            "position": "admin",
+            "createdAt": 1744306201667,
+            "updatedAt": 1744414107517
+        },
+        "b3e6ce56dc4895366c571c2a247a8ff8": {
+            "id": "b3e6ce56dc4895366c571c2a247a8ff8",
+            "name": "sandro",
+            "password": "123qwe",
+            "addressId": "6431cd9adb741ac997e94a02cd7536d9",
+            "document": "RG 234.678-9",
+            "contact": "(12) 93458.354",
+            "position": "employee",
+            "createdAt": 1744438217197,
+            "updatedAt": 1744438221562
+        }
+    },
+    "butcher": {
+        "8c127d19157818dbb00e417e2f183564": {
+            "id": "8c127d19157818dbb00e417e2f183564",
+            "name": "Corno de Boi",
+            "description": "Primeiro Açougue do Grupo",
+            "addressId": "087d383928344aad7974112271ac0393",
+            "createdAt": 955335600000,
+            "updatedAt": 1744307670137
+        }
+    },
+    "addresses": {
+        "4867d567aa72536b8eed950082add7e9": {
+            "type": "residential",
+            "cep": "12.234-003",
+            "street": "Rua Nova",
+            "number": "12",
+            "complement": "",
+            "neighborhood": "Cutia",
+            "city": "Colatina",
+            "state": "ES",
+            "id": "4867d567aa72536b8eed950082add7e9"
+        },
+        "6431cd9adb741ac997e94a02cd7536d9": {
+            "type": "residential",
+            "cep": "12.345-078",
+            "street": "Rua das Lamentações ",
+            "number": "04",
+            "complement": "",
+            "neighborhood": "Tatu de Baixo",
+            "city": "Nova Londres",
+            "state": "GO",
+            "id": "6431cd9adb741ac997e94a02cd7536d9"
+        }
+    },
+    "freezers": {
+        "ac01c5c334fcc4cdd1ae963f5e9a9365": {
+            "name": "Frezzer 01",
+            "type": "freezer",
+            "description": "LG 600",
+            "location": "Sala 01",
+            "maxVolume": 0.0,
+            "volume": 400.0,
+            "maxPieces": 0,
+            "pieces": 50,
+            "createdAt": 1744319183556,
+            "id": "ac01c5c334fcc4cdd1ae963f5e9a9365"
+        },
+        "0996d7c3ec7e8af80c37561966580a8a": {
+            "name": "Câmera Frigorifica",
+            "type": "coldStorage",
+            "description": "Câmera principal",
+            "location": "Sala 03",
+            "maxVolume": 0.0,
+            "volume": 400.0,
+            "maxPieces": 0,
+            "pieces": 150,
+            "createdAt": 1744319830527,
+            "id": "0996d7c3ec7e8af80c37561966580a8a"
+        },
+        "9f6cfd3839516a4c80bed84125dc84c6": {
+            "name": "Freezer 02",
+            "type": "freezer",
+            "description": "Frizzer Sansung Master 1000",
+            "location": "Sala 02",
+            "maxVolume": 0.0,
+            "volume": 1000.0,
+            "maxPieces": 0,
+            "pieces": 50,
+            "createdAt": 1744320135266,
+            "id": "9f6cfd3839516a4c80bed84125dc84c6"
+        },
+        "fdae6d94dc03e2497690c7153ae6b91b": {
+            "name": "Freezer 03",
+            "type": "freezer",
+            "description": "GE 2000",
+            "location": "Sala 04",
+            "maxVolume": 0.0,
+            "volume": 400.0,
+            "maxPieces": 0,
+            "pieces": 50,
+            "createdAt": 1744362382071,
+            "id": "fdae6d94dc03e2497690c7153ae6b91b"
+        },
+        "a77a351304c5638811e44ea7dcedd6df": {
+            "name": "Freezer 04",
+            "type": "freezer",
+            "description": "Consul 400L",
+            "location": "Sala 02",
+            "maxVolume": 0.0,
+            "volume": 200.0,
+            "maxPieces": 0,
+            "pieces": 50,
+            "createdAt": 1744366522349,
+            "id": "a77a351304c5638811e44ea7dcedd6df"
+        }
+    },
+    "products": {
+        "673bd4d7f5fa615fd92f5eaaf0a2ccfe": {
+            "id": "673bd4d7f5fa615fd92f5eaaf0a2ccfe",
+            "cutType": "primalCuts",
+            "primalCut": "traseiro",
+            "retailCuts": "Acem",
+            "comments": "Bezerro do Sebastião",
+            "freezerId": "0996d7c3ec7e8af80c37561966580a8a",
+            "employeeId": "d6e80f970912399b0b9d3d63eb8156f9",
+            "weight": 60.0,
+            "inputDate": 1743476400000,
+            "expirationDate": 1745982000000
+        },
+        "3c4f56f4f12195f9c4289ead005ff7bd": {
+            "id": "3c4f56f4f12195f9c4289ead005ff7bd",
+            "cutType": "retailCuts",
+            "retailCuts": "Peito",
+            "comments": "Chácara do Assis",
+            "freezerId": "ac01c5c334fcc4cdd1ae963f5e9a9365",
+            "employeeId": "d6e80f970912399b0b9d3d63eb8156f9",
+            "weight": 2.35,
+            "inputDate": 1740798000000,
+            "expirationDate": 1744686000000
+        },
+        "1ea769be47ea3ba0132d6d84514e06e2": {
+            "id": "1ea769be47ea3ba0132d6d84514e06e2",
+            "cutType": "retailCuts",
+            "retailCuts": "Musculo",
+            "comments": "Carnes do Vaginho",
+            "freezerId": "9f6cfd3839516a4c80bed84125dc84c6",
+            "employeeId": "d6e80f970912399b0b9d3d63eb8156f9",
+            "weight": 3.5,
+            "inputDate": 1744686000000,
+            "expirationDate": 1748574000000
+        },
+        "39f5f11c97a2219bb09cd30420755213": {
+            "cutType": "retailCuts",
+            "retailCuts": "Cupim",
+            "comments": "República do Boi Gordo",
+            "freezerId": "a77a351304c5638811e44ea7dcedd6df",
+            "employeeId": "d6e80f970912399b0b9d3d63eb8156f9",
+            "weight": 2.5,
+            "inputDate": 1743476400000,
+            "expirationDate": 1761879600000,
+            "id": "39f5f11c97a2219bb09cd30420755213"
+        }
+    }
+}

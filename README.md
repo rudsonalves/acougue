@@ -140,6 +140,44 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/12 - version: 0.50.03+19
+
+### Updated app title and added JSON-based database files for development
+
+This commit updates the home page title and introduces JSON files in the `storage/` directory to serve as the application's local database during development. These structured files simulate backend data, supporting both frontend and logic implementation workflows. The `.gitignore` was also adjusted to include the storage directory.
+
+### Modified Files
+
+- `.gitignore`
+  - Uncommented the `/storage/` entry to allow versioning of local database files stored in the `storage/` directory.
+
+- `lib/ui/features/home/home_page.dart`
+  - Updated the AppBar title text from `'Home'` to `'Sabor da Morte'` to reflect the branding or context of the application.
+
+### New Files
+
+- `storage/data.json`
+  - Main JSON database file containing structured records for users, addresses, butcher shop, freezers, and meat products.
+
+- `storage/data (copy).json`
+  - Backup or alternate version of the primary JSON database, possibly for testing different states or rollback purposes.
+
+- `storage/data copy 2.json`
+  - Additional variant of the JSON database with slightly modified content, useful for simulating alternate data environments.
+
+### Assets and Test Data
+
+- Three comprehensive JSON files were added to simulate the application's database:
+  - `data.json`
+  - `data (copy).json`
+  - `data copy 2.json`
+- These files act as the development-time data store and support testing without a remote backend.
+
+### Conclusion
+
+Changes have been applied successfully. The app now includes local database support via JSON files and updated UI title branding.
+
+
 ## 2025/04/12 - version: 0.50.02+18
 
 ### Add navigation drawer and FAB to enhance home page UX

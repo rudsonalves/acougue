@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Sabor da Morte'),
         centerTitle: true,
         elevation: 5,
         actions: [
