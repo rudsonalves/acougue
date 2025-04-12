@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '/ui/features/home/widgets/app_drawer.dart';
-import '/ui/features/home/widgets/buttons_header.dart';
-import '/ui/features/home/widgets/center_text.dart';
+import 'ui/app_drawer.dart';
+import 'ui/buttons_header.dart';
+import 'ui/center_text.dart';
 import '/domain/models/product.dart';
 import '/domain/enums/enums.dart';
-import '/ui/features/home/widgets/home_header_row.dart';
+import 'ui/home_header_row.dart';
 import '/utils/extensions.dart';
 import '/routing/router.dart';
 import '/ui/core/themes/dimens.dart';
@@ -151,14 +151,16 @@ class _HomePageState extends State<HomePage> {
         title = product.retailCuts!.label;
     }
 
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     Color? color;
 
     if (product.expirationDate.isBefore(_nextWeek)) {
-      color = Colors.redAccent;
+      color = isDark ? Colors.redAccent : Colors.red;
     } else if (product.expirationDate.isBefore(_nextMonth)) {
-      color = Colors.orange;
+      color = isDark ? Colors.orange : Colors.orange.shade600;
     } else if (product.expirationDate.isBefore(_next3Month)) {
-      color = Colors.yellow;
+      color = isDark ? Colors.yellow : Colors.amber.shade600;
     }
 
     return (title, color);

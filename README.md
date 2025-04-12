@@ -140,6 +140,32 @@ Esta estrutura serve como ponto de partida para o desenvolvimento detalhado do p
 
 # ChangeLog
 
+## 2025/04/12 - version: 0.50.05+21
+
+### Adjusted import paths and improved brightness-aware color logic
+
+This commit updates the import paths in `home_page.dart` to reflect the recent relocation of UI widgets into a `ui/` subdirectory, ensuring consistency in file structure and usage. Additionally, the expiration color logic now dynamically adjusts to the app's brightness mode, enhancing visual accessibility in both light and dark themes.
+
+### Modified Files
+
+- `lib/ui/features/home/home_page.dart`
+  - Updated import paths to use relative imports for widgets now located in `ui/`.
+  - Enhanced the `_setTitleAndColor` method to use different colors based on whether the app is in dark or light mode, improving UI adaptability and user experience.
+
+### Renamed Files
+
+- `lib/ui/features/home/widgets/app_drawer.dart` → `lib/ui/features/home/ui/app_drawer.dart`
+- `lib/ui/features/home/widgets/buttons_header.dart` → `lib/ui/features/home/ui/buttons_header.dart`
+- `lib/ui/features/home/widgets/center_text.dart` → `lib/ui/features/home/ui/center_text.dart`
+- `lib/ui/features/home/widgets/home_header_row.dart` → `lib/ui/features/home/ui/home_header_row.dart`
+
+  - These renames reorganize visual components under a dedicated `ui/` folder, clarifying their purpose and aligning the project with component-based architecture practices.
+
+### Conclusion
+
+This refactoring ensures a cleaner project structure and delivers a more responsive UI experience with adaptive color theming.
+
+
 ## 2025/04/12 - version: 0.50.04+20
 
 ### Refactored home page UI by modularizing drawer and button header widgets
