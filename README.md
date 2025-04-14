@@ -1,5 +1,25 @@
 # Açougue Sabor da Morte
 
+Este projeto foi desenvolvido no âmbito do curso Fluterrando, com o objetivo de criar um aplicativo para a gestão de carnes em um açougue, atendendo aos requisitos de operação off-line e à restrição de não utilizar pacotes externos. O desenvolvimento seguiu uma abordagem prática e focada na implementação de soluções sob medida, evidenciando a capacidade de adaptar conceitos tradicionais às demandas específicas do cliente.
+
+O aplicativo conta com um banco de dados em formato JSON, cuja estrutura foi inspirada no esquema de Collections do Firebase, e inclui uma implementação de pseudocódigo para um sistema de autenticação integrado. Essa solução visa oferecer um ambiente de dados flexível e independente, alinhado aos critérios do projeto.
+
+Adicionalmente, o sistema incorpora uma versão personalizada do pacote Provider, utilizando os recursos nativos dos InheritedWidgets do Flutter. Nesta implementação, destacam-se:
+
+- **SimpleProvider:** Gerenciamento de singletons via InheritedWidget, assegurando a disponibilidade consistente de dados em toda a aplicação.
+- **NotifierProvider:** Construído sobre o InheritedNotifier, para suportar a reatividade e permitir atualizações dinâmicas na interface do usuário.
+- **MultiProvider:** Facilita a injeção de múltiplos providers, promovendo uma organização eficaz das dependências.
+
+Complementarmente, foi desenvolvido um Logger próprio, inspirado no pacote Logger, que gerencia as mensagens e eventos do aplicativo de forma estruturada. Foram também implementados pacotes específicos para validações, comandos e gerenciamento de resultados, contribuindo para uma arquitetura modular e coesa.
+
+A centralização dos roteamentos do aplicativo foi realizada com base nos conceitos do go-router, utilizando o Navigator 1.0. Essa escolha foi feita em função das limitações de prazo para a compreensão e adoção do Navigator 2.0, mantendo o foco na entrega de uma solução funcional e robusta.
+
+O desenvolvimento adotou o padrão de projeto MVVM, conforme recomendado pela equipe Flutter, o que permitiu uma clara separação entre a lógica de negócio, a gestão de estados e a interface do usuário. Esta estrutura contribui para a escalabilidade e a manutenção do código, além de refletir as melhores práticas de engenharia de software.
+
+Em síntese, o projeto cumpre os requisitos estabelecidos, apresentando uma solução completa e robusta para a gestão de carnes em açougues, e demonstra a capacidade de desenvolvimento de aplicativos de alta qualidade do Flutter.
+
+# Projeto Açougue
+
 ## 1. Introdução
 
 **Contexto:**  
